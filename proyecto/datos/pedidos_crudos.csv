@@ -1,0 +1,64 @@
+id_pedido,fecha,cliente,ciudad,producto,cantidad,precio_unitario,estado
+1001,18/1/2025,ANA RUIZ,guadalajara ,  Filtro de tela ,2,89.90,ENVIADO
+1002,2025-01-13,Valeria Ortiz,ciudad de mexico,Molinillo manual,5,1250.50,enviado
+1003,2025-01-17,jorge núñez,guadalajara ,CAFÉ DE OLLA,5,185.00,cancelado
+1004,2025-03-04,  Jorge Núñez ,Guadalajara,Café de olla,2, $185.00 ,entregado
+1005,19/02/2025,MARÍA PEÑA,puebla,  Filtro de tela ,4,89.9,entregado
+1006,25/3/2025,ANA RUIZ,Tijuana,FILTRO DE TELA,2, $89.90 ,entregado
+1007,28/02/2025,  Luis Hernández ,N/D,PRENSA FRANCESA,5, $645.00 ,cancelado
+1008,2025-01-21,  Lucía Ibáñez ,mty,  Filtro de tela ,5,$89.90,enviado
+1009,2025-02-13,  Ana Ruiz ,mty,filtro de tela,1,$89.90,entregado
+1010,2025-01-07,,tijuana,  Taza de barro ,1,120.00,cancelado
+1011,2025-01-14,DIEGO RAMÍREZ,GDL,Molinillo manual,3," $1,250.50 ",entregado
+1012,13/1/2025,Lucía Ibáñez,Guadalajara,café de olla,3,$185.00,entregado
+1013,25/02/2025,CARLOS MÉNDEZ, MONTERREY,Filtro de tela,2, $89.90 ,enviado
+1014,15/3/2025,VALERIA ORTIZ,merida,Filtro de tela,0,$89.90,entregado
+1015,28/01/2025,Carlos Méndez,GDL,  Molinillo manual ,1,1250.50,entregado
+1016,2025-02-09,  Luis Hernández ,CIUDAD DE MÉXICO ,FILTRO DE TELA,3,$89.90,Cancelada 
+1005,19/02/2025,MARÍA PEÑA,puebla,  Filtro de tela ,4,89.9,entregado
+1017,09/03/2025,  Valeria Ortiz ,GDL,café de olla,3, $185.00 ,Cancelada 
+1018,11/01/2025,Diego Ramírez,puebla,  Café de olla ,2,185.00,Cancelada 
+1019,27/2/2025,Ana Ruiz, MONTERREY,Taza de barro,1,120.0,en camino
+1020,2025-02-18,DIEGO RAMÍREZ,mty,Café de olla,2,gratis,entregado
+1021,04/02/2025,Carlos Méndez,mty,  Café de olla ,3, $185.00 ,Cancelada 
+1022,2025-01-09,SOFÍA CASTRO,tijuana,Café de olla,2, $185.00 ,devuelto
+1023,11/03/2025,María Peña,Tijuana,MOLINILLO MANUAL,1,1250.5,en camino
+1024,2025-01-16,luis hernández,GDL,FILTRO DE TELA,2,89.90,Cancelada 
+1025,ayer,  Lucía Ibáñez ,CDMX,taza de barro,2,$120.00,entregado
+1026,17/01/2025,Valeria Ortiz,Puebla,PRENSA FRANCESA,2,645.00,entregado
+1027,12/01/2025,María Peña,Monterrey,Café de olla,2,$185.00,entregado
+1028,2025-03-16,Ana Ruiz,CIUDAD DE MÉXICO ,Filtro de tela,1,89.90,Entregada
+1029,07/03/2025,mateo quiñones,san luis potosí,Prensa francesa,2, $645.00 ,enviado
+1030,2025-03-07,JORGE NÚÑEZ, MONTERREY,Filtro de tela,5,89.9,Entregada
+1031,2025-01-14,Luis Hernández,Tijuana,MOLINILLO MANUAL,3,"$1,250.50",cancelado
+1032,2025-03-23,valeria ortiz,Puebla,filtro de tela,dos,89.9,entregado
+1033,27/01/2025,MATEO QUIÑONES,Guadalajara,  Café de olla ,1,185.00,entregado
+1034,03/03/2025,Diego Ramírez,Tijuana,prensa francesa,5,645.00,cancelado
+1035,2025-03-07,  Lucía Ibáñez , MONTERREY,MOLINILLO MANUAL,5," $1,250.50 ",entregado
+1036,2025-03-20,  María Peña ,Ciudad de México,  Taza de barro ,3,120.00,entregado
+1037,23/01/2025,Valeria Ortiz,guadalajara ,filtro de tela,1, $89.90 ,entregado
+1038,2025-01-06,MARÍA PEÑA,,Café de olla,1,185.0,en camino
+1039,19/2/2025,SOFÍA CASTRO,Mérida,MOLINILLO MANUAL,3,1250.50,Cancelada 
+1030,2025-03-07,JORGE NÚÑEZ, MONTERREY,Filtro de tela,5,89.9,Entregada
+1040,2025-03-20,jorge núñez, MONTERREY,PRENSA FRANCESA,5,$645.00,entregado
+1041,2025-02-27,MARÍA PEÑA,Tijuana,MOLINILLO MANUAL,3,1250.50,Cancelada 
+1042,7/2/2025,Sofía Castro,guadalajara ,CAFÉ DE OLLA,3, $185.00 ,en camino
+1043,4/3/2025,maría peña,merida,NA,1,$89.90,ENVIADO
+1044,2025-02-22,  Valeria Ortiz ,tijuana,Prensa francesa,3,645.0,entregado
+1045,2025-02-26,N/D, MÉRIDA ,Taza de barro,1,120.0,Entregada
+1046,20/2/2025,  Carlos Méndez ,Mérida,Taza de barro,5, $120.00 ,entregado
+1047,2025-01-17,Ana Ruiz,Puebla,Filtro de tela,5, $89.90 ,Entregada
+1048,2025-02-16,maría peña,Monterrey,Taza de barro,4, $120.00 ,entregado
+S/N,14/3/2025,Lucía Ibáñez, cdmx,  Taza de barro ,4,120.0,entregado
+1050,2025-03-19,jorge núñez,merida,filtro de tela,2,89.9,en camino
+1051,2025-03-22,ana ruiz,Puebla,  Molinillo manual ,4,1250.5,entregado
+1052,2025-01-06,Diego Ramírez,CDMX,  Prensa francesa ,3,$645.00,enviado
+1053,10/2/2025,  Sofía Castro ,Monterrey,  Filtro de tela ,3,89.9,cancelado
+1054,22/03/2025,maría peña,Mérida,prensa francesa,3,$0.00,en camino
+1055,26/03/2025,LUIS HERNÁNDEZ,Puebla,filtro de tela,3,$89.90,entregado
+1056,2025-03-12,Mateo Quiñones,GDL,Taza de barro,2,120.00,entregado
+1057,04/03/2025,  Ana Ruiz ,CDMX,Café de olla,5,$185.00,ENVIADO
+1058,15/1/2025,Carlos Méndez,GDL,café de olla,-1, $185.00 ,entregado
+1059,07/02/2025,ana ruiz,Ciudad de México,MOLINILLO MANUAL,2," $1,250.50 ",Entregada
+1060,18/02/2025,Sofía Castro,mty,café de olla,3,185.0,entregado
+1012,13/1/2025,Lucía Ibáñez,Guadalajara,café de olla,3,$185.00,entregado
