@@ -71,6 +71,7 @@ pytest lecciones/leccion_00_preparacion
 - **No modifiques las pruebas.** Si una prueba falla, se corrige el código.
 - **Avanza en orden.** Cada lección usa lo de las anteriores.
 - **Lee los errores.** [Esta guía](docs/como-leer-un-error.md) te enseña cómo.
+- **Pregunta cuando te atores.** La comunidad del curso vive en [Discord](https://discord.gg/tWtUXnAMuQ). Di qué lección, qué intentaste y pega el error completo.
 
 ## Cómo está organizado
 
@@ -93,4 +94,5 @@ El código es MIT y las guías son CC BY-NC-SA 4.0. El detalle está en [LICENCI
 
 - Sitio: [elingenierodedatos.com](https://elingenierodedatos.com)
 - YouTube: [@elingenierodedatos](https://www.youtube.com/@elingenierodedatos)
+- Discord: [comunidad del curso](https://discord.gg/tWtUXnAMuQ)
 - GitHub: [github.com/elingenierodedatos](https://github.com/elingenierodedatos)
