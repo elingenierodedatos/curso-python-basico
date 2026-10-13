@@ -1,0 +1,20 @@
+[project]
+name = "curso-python-basico"
+version = "0.1.0"
+description = "Python básico para ingeniería de datos, con ejercicios evaluados por pruebas unitarias."
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+# Permite importar "lecciones" y el paquete del proyecto desde cualquier sistema operativo.
+pythonpath = [".", "proyecto"]
+testpaths = ["lecciones", "proyecto"]
+python_files = ["test_*.py"]
+addopts = "-ra --tb=short --strict-markers --strict-config"
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "B", "UP"]

@@ -1,0 +1,25 @@
+# Entorno virtual
+.venv/
+venv/
+
+# Archivos que genera Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Resultados que generan los ejercicios y el proyecto
+proyecto/salida/
+progreso.json
+
+# Editores y sistema operativo
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Archivos de práctica que crean algunas lecciones
+*.db
+prueba.py
+nota.txt
+salida/

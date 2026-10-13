@@ -1,0 +1,3 @@
+# Dependencias del curso. Se instalan con: python -m pip install -r requirements.txt
+pytest>=8.0
+ruff>=0.6
