@@ -1,0 +1,10 @@
+id_pedido,fecha,cliente,ciudad,producto,cantidad,precio_unitario,estado
+1001,2024-03-01,Ana López,Mérida,Café de olla,2,45.50,entregado
+1002,2024-03-01,  josé pérez ,GUADALAJARA,Molinillo manual,1,"$1,250.50",enviado
+1003,2024-03-02,María Núñez,Ciudad de México,Prensa francesa,1,389.00,Entregado
+1004,2024-03-02,Luis Hernández,monterrey ,Taza de barro,4,85,entregado
+1005,2024-03-03,Sofía Peña,Puebla,Filtro de tela,N/D,60.00,cancelado
+1006,2024-03-03,Carlos Ruiz,,Café de olla,3,45.50,enviado
+1007,2024-03-04,Ana López,Mérida,Taza de barro,dos,85.00,entregado
+1008,2024-03-05,Diego Castañeda,Tijuana,Molinillo manual,1,"$1,250.50",ENVIADO
+1009,2024-03-05,Valeria Ortiz,Guadalajara,Filtro de tela,6,NA,entregado
