@@ -85,6 +85,10 @@ pytest lecciones/leccion_00_preparacion
 
 Todo corre con Python y dos dependencias. No necesitas Docker, ni una base de datos instalada, ni una cuenta en la nube.
 
+## Licencia
+
+El código es MIT y las guías son CC BY-NC-SA 4.0. El detalle está en [LICENCIA-CONTENIDO.md](LICENCIA-CONTENIDO.md). Lo que tú escribas al resolver el curso es tuyo.
+
 ## Más de EL INGENIERO DE DATOS
 
 - Sitio: [elingenierodedatos.com](https://elingenierodedatos.com)
