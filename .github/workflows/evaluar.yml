@@ -37,7 +37,10 @@ jobs:
         env:
           PYTHONUTF8: "1"
 
+      # Los pasos siguientes llevan "if: always()" para que se ejecuten aunque
+      # un paso anterior falle: así siempre ves el resumen y la revisión de estilo.
       - name: Publicar el avance en el resumen
+        if: always()
         shell: python
         env:
           PYTHONUTF8: "1"
@@ -55,4 +58,9 @@ jobs:
               resumen.write("\n".join(lineas) + "\n")
 
       - name: Revisar el estilo
+        if: always()
         run: ruff check .
+
+      - name: Revisar el formato
+        if: always()
+        run: ruff format --check .
