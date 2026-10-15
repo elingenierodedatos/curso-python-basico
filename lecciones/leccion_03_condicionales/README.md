@@ -144,18 +144,7 @@ False
 False
 ```
 
-Hay un detalle que sorprende: para Python, `True` y `False` también son enteros (`True` vale `1` y `False` vale `0`), así que `isinstance(True, int)` da `True`. Si quieres aceptar solo números y rechazar los booleanos, tienes que excluirlos aparte:
-
-```python
-valor = True
-print(isinstance(valor, int))
-print(isinstance(valor, int) and not isinstance(valor, bool))
-```
-
-```text
-True
-False
-```
+Hay un detalle que sorprende: para Python, `True` y `False` también son enteros (`True` vale `1` y `False` vale `0`), así que `isinstance(True, int)` da `True`. Para rechazar los booleanos hace falta combinar dos preguntas; lo verás al final del concepto 4.
 
 ### 4. Combinar condiciones: `and`, `or`, `not`
 
@@ -184,6 +173,19 @@ True
 Cada lado de un `and` o de un `or` debe ser una comparación completa. `estado == "enviado" or "entregado"` no pregunta lo que parece; hay que repetir `estado ==` del otro lado.
 
 **Python evalúa de izquierda a derecha y se detiene en cuanto conoce la respuesta.** En un `and`, si la primera condición es falsa, la segunda ya no se revisa. Eso sirve para proteger una comparación que podría fallar: pon primero la condición que comprueba que es seguro seguir.
+
+**Aceptar enteros, pero no booleanos.** Con `and` y `not` ya puedes resolver el detalle del concepto 3: pide que el valor sea un entero **y** que **no** sea un booleano.
+
+```python
+valor = True
+print(isinstance(valor, int))
+print(isinstance(valor, int) and not isinstance(valor, bool))
+```
+
+```text
+True
+False
+```
 
 ### 5. Pertenencia: `in` y `not in`
 
@@ -474,7 +476,7 @@ pytest lecciones/leccion_03_condicionales -k ejercicio_1
 
 Devuelve `True` si la cantidad es un número entero mayor que cero, y `False` en cualquier otro caso. En un archivo crudo, la columna de cantidad puede traer textos, decimales o nada.
 
-Usa `isinstance(valor, int)`, del concepto 3, y recuerda el detalle de los booleanos: `True` y `False` no son cantidades válidas, aunque para Python sean enteros.
+Usa `isinstance(valor, int)`, del concepto 3, y recuerda el detalle de los booleanos del final del concepto 4: `True` y `False` no son cantidades válidas, aunque para Python sean enteros.
 
 | Entrada | Resultado |
 | --- | --- |
