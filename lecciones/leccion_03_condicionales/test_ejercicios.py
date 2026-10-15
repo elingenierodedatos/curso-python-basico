@@ -35,14 +35,15 @@ def test_ejercicio_1_rechaza_cero_y_negativos(cantidad):
     )
 
 
-@pytest.mark.parametrize("cantidad", ["3", 2.5, None])
+@pytest.mark.parametrize("cantidad", ["3", 2.5, None, True, False])
 def test_ejercicio_1_rechaza_lo_que_no_es_entero(cantidad):
     resultado = es_cantidad_valida(cantidad)
 
     assert resultado is False, (
         f"Con cantidad={cantidad!r} se esperaba False y se obtuvo {resultado!r}. "
         "Pregunta primero si el valor es un entero y solo después compáralo "
-        "con cero."
+        "con cero. Recuerda que para Python True y False también son enteros: "
+        "hay que excluirlos con not isinstance(cantidad, bool)."
     )
 
 

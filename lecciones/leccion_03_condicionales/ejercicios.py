@@ -17,7 +17,8 @@ def es_cantidad_valida(cantidad):
     """Indica si la cantidad es un número entero mayor que cero.
 
     Devuelve True o False. Un texto como "3" o un número con decimales
-    como 2.5 no son cantidades válidas.
+    como 2.5 no son cantidades válidas. Tampoco lo son True ni False:
+    para Python son enteros (True vale 1), así que hay que excluirlos aparte.
 
     Ejemplo:
         >>> es_cantidad_valida(3)
