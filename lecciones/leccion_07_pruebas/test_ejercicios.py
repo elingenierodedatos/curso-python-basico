@@ -713,6 +713,11 @@ def funciones_py_con_defecto(nombre, defectuosa):
     )
 
 
+# pytest termina con 0 si todo pasó y con 1 si alguna prueba falló. Cualquier
+# otro código es un error al recolectar o ejecutar, no un defecto detectado.
+PYTEST_HUBO_PRUEBAS_FALLIDAS = 1
+
+
 def correr_las_pruebas_del_alumno_contra(funciones_py):
     """Corre test_mis_pruebas.py con pytest usando ese texto como funciones.py.
 
@@ -878,9 +883,20 @@ def test_ejercicio_6_tus_pruebas_atrapan_un_defecto_de_cada_funcion():
             proceso = correr_las_pruebas_del_alumno_contra(
                 funciones_py_con_defecto(nombre, defectuosa)
             )
-            if proceso.returncode != 0:
+            if proceso.returncode == PYTEST_HUBO_PRUEBAS_FALLIDAS:
                 # Es lo que queremos: alguna prueba tuya falló con el defecto.
                 break
+            if proceso.returncode != 0:
+                pytest.fail(
+                    "No se pudieron correr tus pruebas contra una copia de "
+                    f"funciones.py con un defecto en {nombre}() (pytest terminó "
+                    f"con el código {proceso.returncode}, que indica un error al "
+                    "recolectar o ejecutar las pruebas, no una prueba fallida). "
+                    "Revisa que tu archivo no dependa de nada fuera de la "
+                    "lección. Esto respondió pytest:\n\n"
+                    + (proceso.stdout + proceso.stderr)[-3000:],
+                    pytrace=False,
+                )
             defectos_que_se_escaparon.append(defectuosa.__doc__)
         else:
             sin_detectar[nombre] = defectos_que_se_escaparon
