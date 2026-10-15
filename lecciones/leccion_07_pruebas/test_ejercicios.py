@@ -1,9 +1,13 @@
 """Pruebas de la lección 7. No modifiques este archivo."""
 
 import ast
+import inspect
 import os
+import shutil
 import subprocess
 import sys
+import tempfile
+import textwrap
 from pathlib import Path
 
 import pytest
@@ -155,10 +159,22 @@ def usa_pytest_raises(funcion):
     return False
 
 
+def es_una_constante(expresion):
+    """Dice si la expresión no usa ningún nombre: `True`, `1 == 1`, `"ok"`..."""
+    for nodo in ast.walk(expresion):
+        if isinstance(nodo, ast.Name):
+            return False
+    return True
+
+
 def comprueba_algo(funcion):
-    """Dice si la función tiene al menos un `assert` o un `pytest.raises`."""
+    """Dice si la función tiene al menos un `assert` útil o un `pytest.raises`.
+
+    Un `assert` cuya expresión es una constante, como `assert True`, pasa
+    siempre y no cuenta como comprobación.
+    """
     for nodo in ast.walk(funcion):
-        if isinstance(nodo, ast.Assert):
+        if isinstance(nodo, ast.Assert) and not es_una_constante(nodo.test):
             return True
     return usa_pytest_raises(funcion)
 
@@ -639,6 +655,19 @@ def test_ejercicio_5_los_casos_atrapan_la_version_que(defectuosa):
 
 
 # --- Ejercicio 6: tu archivo test_mis_pruebas.py ---
+#
+# Aquí no basta con mirar tu archivo: lo corremos con pytest. Primero contra
+# el funciones.py correcto, donde todas tus pruebas deben pasar, y después
+# contra copias de funciones.py en las que una función trae un defecto (las
+# mismas versiones defectuosas de los ejercicios 1 a 4). Con cada función que
+# uses, al menos una de esas versiones debe hacer fallar alguna prueba tuya.
+
+DEFECTUOSAS_POR_FUNCION = {
+    "limpiar_precio": DEFECTUOSAS_DE_LIMPIAR_PRECIO,
+    "clasificar_importe": DEFECTUOSAS_DE_CLASIFICAR_IMPORTE,
+    "validar_cantidad": DEFECTUOSAS_DE_VALIDAR_CANTIDAD,
+    "contar_por_ciudad": DEFECTUOSAS_DE_CONTAR_POR_CIUDAD,
+}
 
 
 def buscar_pruebas_del_alumno():
@@ -648,6 +677,83 @@ def buscar_pruebas_del_alumno():
         "la lección. Debe llamarse exactamente así para que pytest lo descubra."
     )
     return buscar_funciones(leer_arbol(ARCHIVO_DEL_ALUMNO), "test_")
+
+
+def funciones_usadas_en(pruebas):
+    """Devuelve cuáles de las funciones de funciones.py aparecen en las pruebas."""
+    usadas = []
+    for nombre in FUNCIONES_A_PROBAR:
+        for prueba in pruebas:
+            if nombre in nombres_usados(prueba) and nombre not in usadas:
+                usadas.append(nombre)
+    return usadas
+
+
+def funciones_py_correcto():
+    """Devuelve el texto del funciones.py de la lección, que funciona bien."""
+    return (CARPETA / "funciones.py").read_text(encoding="utf-8")
+
+
+def funciones_py_con_defecto(nombre, defectuosa):
+    """Devuelve el texto de un funciones.py donde `nombre` es la versión defectuosa.
+
+    Las demás funciones quedan como en el funciones.py correcto. Las versiones
+    correctas se guardan antes en `funciones`, porque algunas defectuosas se
+    apoyan en ellas.
+    """
+    fuente = textwrap.dedent(inspect.getsource(defectuosa))
+    fuente = fuente.replace(f"def {defectuosa.__name__}(", f"def {nombre}(", 1)
+    correctas = ", ".join(f"{n}={n}" for n in FUNCIONES_A_PROBAR)
+    return (
+        funciones_py_correcto()
+        + "\n\n# --- Versión defectuosa, generada por test_ejercicios.py ---\n\n"
+        + "import types\n\n"
+        + f"funciones = types.SimpleNamespace({correctas})\n\n\n"
+        + fuente
+    )
+
+
+def correr_las_pruebas_del_alumno_contra(funciones_py):
+    """Corre test_mis_pruebas.py con pytest usando ese texto como funciones.py.
+
+    Copia los archivos de la lección a una carpeta temporal, con la misma
+    estructura de paquetes para que los imports del alumno sigan funcionando,
+    reemplaza funciones.py por el texto recibido y corre pytest ahí dentro.
+    Devuelve el proceso terminado.
+    """
+    with tempfile.TemporaryDirectory() as temporal:
+        raiz = Path(temporal)
+        paquete = raiz / "lecciones" / "leccion_07_pruebas"
+        paquete.mkdir(parents=True)
+        # Un pytest.ini vacío evita que pytest busque otra configuración.
+        (raiz / "pytest.ini").write_text("", encoding="utf-8")
+        (raiz / "lecciones" / "__init__.py").write_text("", encoding="utf-8")
+        for archivo in CARPETA.glob("*.py"):
+            if archivo.name not in {"test_ejercicios.py", "funciones.py"}:
+                shutil.copy(archivo, paquete / archivo.name)
+        (paquete / "funciones.py").write_text(funciones_py, encoding="utf-8")
+
+        entorno = dict(os.environ)
+        entorno["PYTHONUTF8"] = "1"
+        entorno["PYTHONPATH"] = str(raiz)
+        return subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "pytest",
+                str(paquete / "test_mis_pruebas.py"),
+                "-q",
+                "-p",
+                "no:cacheprovider",
+                "--tb=short",
+            ],
+            cwd=raiz,
+            env=entorno,
+            capture_output=True,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
+        )
 
 
 def test_ejercicio_6_tiene_al_menos_tres_pruebas():
@@ -675,9 +781,10 @@ def test_ejercicio_6_cada_prueba_comprueba_algo():
         "Escribe la primera siguiendo el concepto 2 de la guía."
     )
     assert not sin_comprobacion, (
-        f"Estas pruebas no tienen ningún assert ni pytest.raises: "
-        f"{sin_comprobacion!r}. Una prueba que no comprueba nada pasa siempre, "
-        "aunque el código esté mal."
+        f"Estas pruebas no comprueban nada: {sin_comprobacion!r}. Necesitan un "
+        "assert sobre lo que devuelve la función o un pytest.raises. Un assert "
+        "que no usa ningún valor, como assert True, pasa siempre, aunque el "
+        "código esté mal, así que no cuenta."
     )
 
 
@@ -698,11 +805,7 @@ def test_ejercicio_6_al_menos_una_prueba_esta_parametrizada():
 
 def test_ejercicio_6_las_pruebas_usan_al_menos_tres_funciones():
     pruebas = buscar_pruebas_del_alumno()
-    usadas = []
-    for nombre in FUNCIONES_A_PROBAR:
-        for prueba in pruebas:
-            if nombre in nombres_usados(prueba) and nombre not in usadas:
-                usadas.append(nombre)
+    usadas = funciones_usadas_en(pruebas)
 
     assert len(usadas) >= 3, (
         f"Tus pruebas deben usar al menos 3 de las 4 funciones de funciones.py "
@@ -737,5 +840,64 @@ def test_ejercicio_6_todas_tus_pruebas_pasan():
             "tus pruebas. Como funciones.py funciona bien, revisa qué espera "
             "cada prueba que falla. Esto respondió pytest:\n\n"
             + proceso.stdout[-3000:],
+            pytrace=False,
+        )
+
+
+def test_ejercicio_6_tus_pruebas_atrapan_un_defecto_de_cada_funcion():
+    revisar_que_funciones_py_este_intacto()
+    pruebas = buscar_pruebas_del_alumno()
+    assert pruebas, (
+        f"Todavía no hay funciones test_ en {ARCHIVO_DEL_ALUMNO.name}, así que "
+        "no hay nada que correr."
+    )
+    usadas = funciones_usadas_en(pruebas)
+    assert usadas, (
+        f"Tus pruebas no usan ninguna función de funciones.py "
+        f"({FUNCIONES_A_PROBAR!r}), así que no hay nada que cuidar."
+    )
+
+    # Una prueba que falla siempre no detecta nada: primero deben pasar todas
+    # con el funciones.py correcto.
+    proceso = correr_las_pruebas_del_alumno_contra(funciones_py_correcto())
+    if proceso.returncode != 0:
+        pytest.fail(
+            "Antes de buscar defectos, tus pruebas deben pasar con el "
+            "funciones.py de la lección, que funciona bien. Corre "
+            f"pytest lecciones/leccion_07_pruebas/{ARCHIVO_DEL_ALUMNO.name} "
+            "y corrige lo que falle. Esto respondió pytest:\n\n"
+            + proceso.stdout[-3000:],
+            pytrace=False,
+        )
+
+    sin_detectar = {}
+    for nombre in usadas:
+        defectos_que_se_escaparon = []
+        for parametro in DEFECTUOSAS_POR_FUNCION[nombre]:
+            defectuosa = parametro.values[0]
+            proceso = correr_las_pruebas_del_alumno_contra(
+                funciones_py_con_defecto(nombre, defectuosa)
+            )
+            if proceso.returncode != 0:
+                # Es lo que queremos: alguna prueba tuya falló con el defecto.
+                break
+            defectos_que_se_escaparon.append(defectuosa.__doc__)
+        else:
+            sin_detectar[nombre] = defectos_que_se_escaparon
+
+    if sin_detectar:
+        lineas = []
+        for nombre, defectos in sin_detectar.items():
+            lineas.append(f"- {nombre}(): " + "; ".join(defectos) + ".")
+        pytest.fail(
+            "A tus pruebas se les escaparon defectos. Las corrimos contra "
+            "copias de funciones.py en las que una función tiene un defecto, "
+            "y con estas funciones pasaron con todas sus versiones "
+            "defectuosas:\n\n"
+            + "\n".join(lineas)
+            + "\n\nUna prueba que pasa con una función defectuosa no la cuida. "
+            "Para cada función de la lista, piensa con qué entrada se notaría "
+            "alguno de esos defectos y agrega una prueba, o un caso en la "
+            "parametrizada, que use esa entrada y compruebe el resultado.",
             pytrace=False,
         )

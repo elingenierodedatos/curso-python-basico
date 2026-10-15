@@ -47,11 +47,11 @@ Cada decisión de diseño tiene un sustento. Estas son las principales.
 | 4 | Diccionarios y conjuntos | 120 min | 35 |
 | 5 | Funciones y módulos | 100 min | 53 |
 | 6 | Archivos y manejo de errores | 120 min | 63 |
-| 7 | Pruebas con pytest | 140 min | 41 |
+| 7 | Pruebas con pytest | 140 min | 42 |
 | 8 | Guardar y consultar datos con SQLite | 120 min | 46 |
 | P | Proyecto final: flujo de ventas | 8 h | 105 |
 
-El curso se aprueba cuando las 474 pruebas pasan.
+El curso se aprueba cuando las 475 pruebas pasan.
 
 ### Lección 0. Preparación
 
