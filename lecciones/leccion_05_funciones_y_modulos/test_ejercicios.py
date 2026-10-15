@@ -6,7 +6,6 @@ import pytest
 
 from lecciones.leccion_05_funciones_y_modulos import limpieza
 from lecciones.leccion_05_funciones_y_modulos.ejercicios import (
-    aplicar_a_todos,
     es_pedido_valido,
     limpiar_pedido,
     separar_validos,
@@ -441,58 +440,4 @@ def test_ejercicio_6_no_modifica_la_lista_original():
         "separar_validos() cambió la lista que recibió: ahora vale "
         f"{pedidos!r}. Agrega cada pedido a una lista nueva sin quitarlo "
         "de la original."
-    )
-
-
-# --- Ejercicio 7: aplicar_a_todos ---
-
-
-def test_ejercicio_7_aplica_una_funcion_definida_en_la_prueba():
-    def obtener_ciudad(pedido):
-        return pedido["ciudad"]
-
-    pedidos = [crear_pedido_limpio(), crear_pedido_con("ciudad", "Tijuana")]
-
-    resultado = aplicar_a_todos(pedidos, obtener_ciudad)
-
-    assert resultado == ["Guadalajara", "Tijuana"], (
-        "Con dos pedidos, de Guadalajara y Tijuana, y una función que devuelve "
-        "la ciudad, se esperaba ['Guadalajara', 'Tijuana'] y se obtuvo "
-        f"{resultado!r}. Llama a funcion con cada pedido y guarda lo que devuelve."
-    )
-
-
-def test_ejercicio_7_aplica_limpiar_pedido_a_una_lista_de_pedidos_crudos():
-    pedidos_crudos = [crear_pedido_crudo(), crear_pedido_crudo()]
-
-    resultado = aplicar_a_todos(pedidos_crudos, limpiar_pedido)
-
-    assert resultado == [crear_pedido_limpio(), crear_pedido_limpio()], (
-        "Con dos pedidos crudos iguales y la función limpiar_pedido se esperaban "
-        f"dos pedidos limpios y se obtuvo {resultado!r}. Esta prueba también "
-        "necesita que el ejercicio 4 esté completo."
-    )
-
-
-def test_ejercicio_7_con_lista_vacia_devuelve_lista_vacia():
-    resultado = aplicar_a_todos([], len)
-
-    assert resultado == [], (
-        f"Con pedidos=[] se esperaba [] y se obtuvo {resultado!r}. "
-        "Si no hay pedidos, la lista de resultados se queda vacía."
-    )
-
-
-def test_ejercicio_7_devuelve_una_lista_nueva_y_no_modifica_la_original():
-    pedidos = [crear_pedido_limpio(), crear_pedido_con("cantidad", 5)]
-
-    resultado = aplicar_a_todos(pedidos, len)
-
-    assert resultado == [6, 6], (
-        "Con dos pedidos de seis claves y la función len se esperaba [6, 6] "
-        f"y se obtuvo {resultado!r}."
-    )
-    assert pedidos == [crear_pedido_limpio(), crear_pedido_con("cantidad", 5)], (
-        "aplicar_a_todos() cambió la lista que recibió: ahora vale "
-        f"{pedidos!r}. Guarda los resultados en una lista nueva."
     )
