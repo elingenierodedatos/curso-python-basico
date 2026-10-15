@@ -1,5 +1,7 @@
 """Pruebas de la lección 4. No modifiques este archivo."""
 
+import copy
+
 import pytest
 
 from lecciones.leccion_04_diccionarios.ejercicios import (
@@ -210,6 +212,7 @@ def test_ejercicio_3_no_modifica_el_pedido_original():
 
 def test_ejercicio_4_cuenta_los_pedidos_de_cada_ciudad():
     pedidos = pedidos_de_ejemplo()
+    copia = copy.deepcopy(pedidos)
     esperado = {"Puebla": 3, "Monterrey": 1, "Guadalajara": 1}
 
     resultado = contar_por_ciudad(pedidos)
@@ -218,6 +221,9 @@ def test_ejercicio_4_cuenta_los_pedidos_de_cada_ciudad():
         "Con cinco pedidos (tres de Puebla, uno de Monterrey y uno de Guadalajara) "
         f"se esperaba {esperado!r} y se obtuvo {resultado!r}. Cada pedido suma 1 "
         "a la cuenta de su ciudad."
+    )
+    assert pedidos == copia, (
+        "La función no debe modificar la lista ni los diccionarios que recibe."
     )
 
 
@@ -246,6 +252,7 @@ def test_ejercicio_4_devuelve_un_diccionario_vacio_si_no_hay_pedidos():
 
 def test_ejercicio_5_suma_el_importe_de_cada_producto():
     pedidos = pedidos_de_ejemplo()
+    copia = copy.deepcopy(pedidos)
     esperado = {
         "Café de olla": 925.0,
         "Prensa francesa": 420.0,
@@ -259,6 +266,9 @@ def test_ejercicio_5_suma_el_importe_de_cada_producto():
         f"Con los cinco pedidos de ejemplo se esperaba {esperado!r} y se obtuvo "
         f"{resultado!r}. El importe de cada pedido es cantidad por precio "
         "unitario, y se acumula en la clave de su producto."
+    )
+    assert pedidos == copia, (
+        "La función no debe modificar la lista ni los diccionarios que recibe."
     )
 
 
@@ -289,11 +299,17 @@ def test_ejercicio_5_devuelve_un_diccionario_vacio_si_no_hay_pedidos():
 
 
 def test_ejercicio_6_devuelve_una_lista():
-    resultado = ciudades_unicas(pedidos_de_ejemplo())
+    pedidos = pedidos_de_ejemplo()
+    copia = copy.deepcopy(pedidos)
+
+    resultado = ciudades_unicas(pedidos)
 
     assert isinstance(resultado, list), (
         "ciudades_unicas() debe devolver una lista (list). "
         f"Devolvió {resultado!r}, que es de tipo {type(resultado).__name__}."
+    )
+    assert pedidos == copia, (
+        "La función no debe modificar la lista ni los diccionarios que recibe."
     )
 
 
@@ -337,6 +353,7 @@ def test_ejercicio_6_devuelve_una_lista_vacia_si_no_hay_pedidos():
 
 def test_ejercicio_7_devuelve_el_pedido_de_mayor_importe():
     pedidos = pedidos_de_ejemplo()
+    copia = copy.deepcopy(pedidos)
 
     resultado = pedido_mas_grande(pedidos)
 
@@ -344,6 +361,9 @@ def test_ejercicio_7_devuelve_el_pedido_de_mayor_importe():
         f"Con los cinco pedidos de ejemplo se esperaba el pedido 1004 "
         f"(3 piezas a 185.0, importe 555.0) y se obtuvo {resultado!r}. "
         "Se compara cantidad por precio unitario."
+    )
+    assert pedidos == copia, (
+        "La función no debe modificar la lista ni los diccionarios que recibe."
     )
 
 
@@ -392,6 +412,22 @@ def test_ejercicio_7_en_un_empate_devuelve_el_primero():
         "Los pedidos 1002 y 1003 tienen el mismo importe (370.0). Se esperaba el "
         f"primero de ellos, el 1002, y se obtuvo {resultado!r}. Revisa si tu "
         "comparación reemplaza al mayor cuando el importe es igual."
+    )
+
+
+def test_ejercicio_7_un_empate_por_decimales_tambien_devuelve_el_primero():
+    pedidos = [
+        {"id_pedido": 1001, "cantidad": 1, "precio_unitario": 0.3},
+        {"id_pedido": 1002, "cantidad": 3, "precio_unitario": 0.1},
+    ]
+
+    resultado = pedido_mas_grande(pedidos)
+
+    assert resultado == pedidos[0], (
+        "Los pedidos 1001 (1 × 0.3) y 1002 (3 × 0.1) valen lo mismo: 0.3. Se "
+        f"esperaba el primero, el 1001, y se obtuvo {resultado!r}. Sin redondear, "
+        "3 * 0.1 da 0.30000000000000004 y parece mayor. Redondea cada importe a "
+        "dos decimales antes de comparar, como en los ejercicios anteriores."
     )
 
 

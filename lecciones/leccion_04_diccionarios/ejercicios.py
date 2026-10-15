@@ -106,7 +106,8 @@ def ciudades_unicas(pedidos):
 def pedido_mas_grande(pedidos):
     """Devuelve el pedido con el mayor importe (cantidad por precio unitario).
 
-    Si la lista está vacía devuelve None. Si hay empate, devuelve el primero.
+    Redondea cada importe a dos decimales antes de comparar. Si la lista está
+    vacía devuelve None. Si hay empate, devuelve el primero.
 
     Ejemplo:
         >>> pedidos = [
