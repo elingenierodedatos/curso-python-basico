@@ -1,13 +1,13 @@
 """Pruebas de la lección 6. No modifiques este archivo."""
 
-import ast
+import builtins
 import csv
-import inspect
 import json
+import pathlib
+from pathlib import Path
 
 import pytest
 
-from lecciones.leccion_06_archivos_y_errores import ejercicios
 from lecciones.leccion_06_archivos_y_errores.ejercicios import (
     a_entero,
     contar_lineas,
@@ -33,31 +33,48 @@ FILAS = [
 COLUMNAS = ["id_pedido", "cliente", "ciudad"]
 
 
-def leer_arbol_de(funcion):
-    """Devuelve la estructura del código fuente de una función para inspeccionarla."""
-    codigo = inspect.getsource(funcion)
-    return ast.parse(codigo)
+def aperturas_de_archivo_durante(monkeypatch, accion):
+    """Corre accion() y anota cada vez que se abre un archivo.
 
+    Espía tanto open(...) como ruta.open(...) y devuelve una lista de
+    tuplas (ruta, modo, newline) con lo que recibió cada apertura.
+    """
+    aperturas = []
+    open_original = builtins.open
+    path_open_original = pathlib.Path.open
 
-def alguna_llamada_a_open_lleva_newline_vacio(funcion):
-    """Dice si dentro de la función hay un open(...) o ruta.open(...) con newline=""."""
-    for nodo in ast.walk(leer_arbol_de(funcion)):
-        if not isinstance(nodo, ast.Call):
-            continue
-        es_open_global = isinstance(nodo.func, ast.Name) and nodo.func.id == "open"
-        es_open_de_ruta = (
-            isinstance(nodo.func, ast.Attribute) and nodo.func.attr == "open"
+    def valor(args, kwargs, nombre, posicion, por_defecto):
+        if nombre in kwargs:
+            return kwargs[nombre]
+        if len(args) > posicion:
+            return args[posicion]
+        return por_defecto
+
+    def open_espia(*args, **kwargs):
+        aperturas.append(
+            (
+                Path(valor(args, kwargs, "file", 0, "")),
+                valor(args, kwargs, "mode", 1, "r"),
+                valor(args, kwargs, "newline", 5, None),
+            )
         )
-        if not es_open_global and not es_open_de_ruta:
-            continue
-        for argumento in nodo.keywords:
-            if (
-                argumento.arg == "newline"
-                and isinstance(argumento.value, ast.Constant)
-                and argumento.value.value == ""
-            ):
-                return True
-    return False
+        return open_original(*args, **kwargs)
+
+    def path_open_espia(self, *args, **kwargs):
+        aperturas.append(
+            (
+                Path(self),
+                valor(args, kwargs, "mode", 0, "r"),
+                valor(args, kwargs, "newline", 4, None),
+            )
+        )
+        return path_open_original(self, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "open", open_espia)
+    monkeypatch.setattr(pathlib.Path, "open", path_open_espia)
+    accion()
+    monkeypatch.undo()
+    return aperturas
 
 
 # --- Ejercicio 1: contar_lineas ---
@@ -329,13 +346,28 @@ def test_ejercicio_4_no_deja_lineas_en_blanco_entre_filas(tmp_path):
     )
 
 
-def test_ejercicio_4_abre_el_archivo_con_newline_vacio():
+def test_ejercicio_4_abre_el_archivo_con_newline_vacio(tmp_path, monkeypatch):
     # En macOS y Linux el archivo sale bien aunque falte newline="", así que la
-    # prueba anterior no lo nota. Aquí se revisa el código fuente directamente,
-    # para que el mismo código funcione también en Windows.
-    assert alguna_llamada_a_open_lleva_newline_vacio(ejercicios.escribir_csv), (
-        "En escribir_csv() no se encontró ninguna llamada a open() con el "
-        "argumento newline=''. Sin él, en Windows el módulo csv y Python "
+    # prueba anterior no lo nota. Aquí se revisa con qué valor se abrió el
+    # archivo, para que el mismo código funcione también en Windows.
+    ruta = tmp_path / "pedidos.csv"
+
+    aperturas = aperturas_de_archivo_durante(
+        monkeypatch, lambda: escribir_csv(ruta, FILAS, COLUMNAS)
+    )
+    escrituras = [
+        newline
+        for destino, modo, newline in aperturas
+        if destino == ruta and any(letra in modo for letra in "wax")
+    ]
+
+    assert escrituras, (
+        "escribir_csv() no abrió el archivo para escribir. Ábrelo con "
+        "open(ruta, 'w', ...) o ruta.open('w', ...)."
+    )
+    assert all(newline == "" for newline in escrituras), (
+        "escribir_csv() abrió el archivo sin newline='' (se recibió "
+        f"newline={escrituras[0]!r}). Sin él, en Windows el módulo csv y Python "
         "traducen los finales de línea por separado y el archivo queda con una "
         "línea en blanco entre fila y fila. Abre siempre el archivo con "
         "encoding='utf-8', newline='' cuando uses el módulo csv."
