@@ -1,7 +1,10 @@
 """Pruebas de la lección 6. No modifiques este archivo."""
 
+import builtins
 import csv
 import json
+import pathlib
+from pathlib import Path
 
 import pytest
 
@@ -28,6 +31,51 @@ FILAS = [
     {"id_pedido": "1003", "cliente": "Diego Castañeda", "ciudad": "Tijuana"},
 ]
 COLUMNAS = ["id_pedido", "cliente", "ciudad"]
+
+
+def aperturas_de_archivo_durante(monkeypatch, accion):
+    """Corre accion() y anota cada vez que se abre un archivo.
+
+    Espía tanto open(...) como ruta.open(...) y devuelve una lista de
+    tuplas (ruta, modo, newline) con lo que recibió cada apertura.
+    """
+    aperturas = []
+    open_original = builtins.open
+    path_open_original = pathlib.Path.open
+
+    def valor(args, kwargs, nombre, posicion, por_defecto):
+        if nombre in kwargs:
+            return kwargs[nombre]
+        if len(args) > posicion:
+            return args[posicion]
+        return por_defecto
+
+    def open_espia(*args, **kwargs):
+        aperturas.append(
+            (
+                Path(valor(args, kwargs, "file", 0, "")),
+                valor(args, kwargs, "mode", 1, "r"),
+                valor(args, kwargs, "newline", 5, None),
+            )
+        )
+        return open_original(*args, **kwargs)
+
+    def path_open_espia(self, *args, **kwargs):
+        aperturas.append(
+            (
+                Path(self),
+                valor(args, kwargs, "mode", 0, "r"),
+                valor(args, kwargs, "newline", 4, None),
+            )
+        )
+        return path_open_original(self, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "open", open_espia)
+    monkeypatch.setattr(pathlib.Path, "open", path_open_espia)
+    accion()
+    monkeypatch.undo()
+    return aperturas
+
 
 # --- Ejercicio 1: contar_lineas ---
 
@@ -284,11 +332,45 @@ def test_ejercicio_4_no_deja_lineas_en_blanco_entre_filas(tmp_path):
     ruta = tmp_path / "pedidos.csv"
 
     escribir_csv(ruta, FILAS, COLUMNAS)
-    lineas = ruta.read_text(encoding="utf-8").splitlines()
+    contenido = ruta.read_bytes()
+    lineas = contenido.decode("utf-8").splitlines()
 
+    assert b"\r\r\n" not in contenido, (
+        "El archivo tiene finales de línea dobles (\\r\\r\\n): es la marca de "
+        "haber abierto el archivo sin newline=''. En Windows eso deja una línea "
+        "en blanco entre fila y fila. Revisa el argumento newline al abrir."
+    )
     assert len(lineas) == 4 and "" not in lineas, (
         "Con encabezado y 3 filas se esperaban 4 líneas, ninguna vacía, "
         f"y se obtuvo {lineas!r}. Revisa el argumento newline al abrir el archivo."
+    )
+
+
+def test_ejercicio_4_abre_el_archivo_con_newline_vacio(tmp_path, monkeypatch):
+    # En macOS y Linux el archivo sale bien aunque falte newline="", así que la
+    # prueba anterior no lo nota. Aquí se revisa con qué valor se abrió el
+    # archivo, para que el mismo código funcione también en Windows.
+    ruta = tmp_path / "pedidos.csv"
+
+    aperturas = aperturas_de_archivo_durante(
+        monkeypatch, lambda: escribir_csv(ruta, FILAS, COLUMNAS)
+    )
+    escrituras = [
+        newline
+        for destino, modo, newline in aperturas
+        if destino == ruta and any(letra in modo for letra in "wax")
+    ]
+
+    assert escrituras, (
+        "escribir_csv() no abrió el archivo para escribir. Ábrelo con "
+        "open(ruta, 'w', ...) o ruta.open('w', ...)."
+    )
+    assert all(newline == "" for newline in escrituras), (
+        "escribir_csv() abrió el archivo sin newline='' (se recibió "
+        f"newline={escrituras[0]!r}). Sin él, en Windows el módulo csv y Python "
+        "traducen los finales de línea por separado y el archivo queda con una "
+        "línea en blanco entre fila y fila. Abre siempre el archivo con "
+        "encoding='utf-8', newline='' cuando uses el módulo csv."
     )
 
 

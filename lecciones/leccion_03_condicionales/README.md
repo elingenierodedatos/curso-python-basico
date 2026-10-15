@@ -19,7 +19,7 @@ Limpiar datos es, sobre todo, decidir: este valor sirve, este no; este pedido en
 
 Una regla mal escrita no siempre produce un error. A veces el programa corre, entrega un resultado y el resultado está mal. Por eso aquí practicas también los límites exactos de cada regla: qué pasa justo en 500, justo en cero, justo cuando la lista está vacía.
 
-Las funciones `es_faltante()` y `normalizar_estado()` que escribas en esta lección reaparecen en el proyecto final.
+La lógica de `es_faltante()` y `normalizar_estado()` que escribas en esta lección es la base del proyecto final, aunque allí no siempre tenga los mismos nombres: `es_faltante()` reaparece tal cual en el módulo de limpieza, y los sinónimos de cada estado, en lugar de una cadena de `elif`, se guardan en un diccionario llamado `ESTADOS`.
 
 ## Cómo trabajar esta lección
 
@@ -130,6 +130,22 @@ TypeError: '>' not supported between instances of 'str' and 'int'
 
 Con `==` no hay error, pero la respuesta puede sorprenderte: `"5" == 5` da `False`, porque un texto nunca es igual a un número.
 
+**Preguntar por el tipo antes de comparar.** Cuando no sabes qué tipo trae un valor, `isinstance(valor, int)` responde `True` si es un entero y `False` si no lo es. Sirve para evitar el `TypeError` de arriba: primero preguntas si es un número y solo después lo comparas.
+
+```python
+print(isinstance(5, int))
+print(isinstance("5", int))
+print(isinstance(2.5, int))
+```
+
+```text
+True
+False
+False
+```
+
+Hay un detalle que sorprende: para Python, `True` y `False` también son enteros (`True` vale `1` y `False` vale `0`), así que `isinstance(True, int)` da `True`. Para rechazar los booleanos hace falta combinar dos preguntas; lo verás al final del concepto 4.
+
 ### 4. Combinar condiciones: `and`, `or`, `not`
 
 | Operador | Es `True` cuando... | Ejemplo | Resultado |
@@ -157,6 +173,19 @@ True
 Cada lado de un `and` o de un `or` debe ser una comparación completa. `estado == "enviado" or "entregado"` no pregunta lo que parece; hay que repetir `estado ==` del otro lado.
 
 **Python evalúa de izquierda a derecha y se detiene en cuanto conoce la respuesta.** En un `and`, si la primera condición es falsa, la segunda ya no se revisa. Eso sirve para proteger una comparación que podría fallar: pon primero la condición que comprueba que es seguro seguir.
+
+**Aceptar enteros, pero no booleanos.** Con `and` y `not` ya puedes resolver el detalle del concepto 3: pide que el valor sea un entero **y** que **no** sea un booleano.
+
+```python
+valor = True
+print(isinstance(valor, int))
+print(isinstance(valor, int) and not isinstance(valor, bool))
+```
+
+```text
+True
+False
+```
 
 ### 5. Pertenencia: `in` y `not in`
 
@@ -447,7 +476,7 @@ pytest lecciones/leccion_03_condicionales -k ejercicio_1
 
 Devuelve `True` si la cantidad es un número entero mayor que cero, y `False` en cualquier otro caso. En un archivo crudo, la columna de cantidad puede traer textos, decimales o nada.
 
-Necesitas una función nueva: `isinstance(valor, int)` responde `True` si el valor es de tipo `int` y `False` si no lo es.
+Usa `isinstance(valor, int)`, del concepto 3, y recuerda el detalle de los booleanos del final del concepto 4: `True` y `False` no son cantidades válidas, aunque para Python sean enteros.
 
 | Entrada | Resultado |
 | --- | --- |
@@ -455,12 +484,13 @@ Necesitas una función nueva: `isinstance(valor, int)` responde `True` si el val
 | `es_cantidad_valida(0)` | `False` |
 | `es_cantidad_valida("3")` | `False` |
 | `es_cantidad_valida(2.5)` | `False` |
+| `es_cantidad_valida(True)` | `False` |
 
 Paso a paso:
 
-1. Pregunta si la cantidad es un entero.
+1. Pregunta si la cantidad es un entero y no es un booleano.
 2. Pregunta si la cantidad es mayor que cero.
-3. Devuelve `True` solo si se cumplen las dos condiciones.
+3. Devuelve `True` solo si se cumplen todas las condiciones.
 
 <details>
 <summary>Pista 1</summary>
@@ -694,7 +724,7 @@ Cuando termines los siete ejercicios, corre la lección completa:
 pytest lecciones/leccion_03_condicionales
 ```
 
-Debes ver `62 passed`. Si una prueba falla, lee la línea que empieza con `E`: te dice con qué valores se probó, qué se esperaba y qué devolvió tu función.
+Debes ver `64 passed`. Si una prueba falla, lee la línea que empieza con `E`: te dice con qué valores se probó, qué se esperaba y qué devolvió tu función.
 
 Revisa también el estilo de tu código:
 

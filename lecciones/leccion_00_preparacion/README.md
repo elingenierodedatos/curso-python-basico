@@ -17,7 +17,7 @@ Necesitas Python 3.10 o más reciente.
 
 | Sistema | Cómo instalarlo |
 | --- | --- |
-| Windows | Descarga el instalador desde [python.org/downloads](https://www.python.org/downloads/). En la primera pantalla marca la casilla **Add python.exe to PATH** antes de continuar. |
+| Windows | Descarga el instalador desde [python.org/downloads](https://www.python.org/downloads/). En la primera pantalla marca la casilla **Add python.exe to PATH** antes de continuar. Al terminar, **cierra PowerShell y vuelve a abrirlo**: una terminal abierta antes de la instalación no reconoce el comando `python`. |
 | macOS | Descarga el instalador desde [python.org/downloads](https://www.python.org/downloads/) y sigue los pasos. |
 | Linux | Casi siempre ya viene instalado. Si no, en Ubuntu o Debian: `sudo apt install python3 python3-venv`. |
 
@@ -31,10 +31,21 @@ Debe aparecer algo como `Python 3.12.4`.
 
 > En macOS y Linux, si el comando `python` no existe, usa `python3`. Solo lo necesitas así hasta el paso 4; después de activar el entorno virtual, `python` funciona en todos los sistemas.
 
+> **Windows:** si al escribir `python` se abre la Microsoft Store en lugar de mostrarte la versión, Windows tiene un atajo que se interpone. Abre **Inicio**, escribe "alias de ejecución", entra en **Administrar alias de ejecución de aplicaciones** y apaga los interruptores de **python.exe** y **python3.exe**. Después abre una terminal nueva y vuelve a probar.
+
 ## Paso 2. Instala Git y un editor
 
-- **Git** guarda el historial de tu trabajo y lo sube a GitHub. Descárgalo desde [git-scm.com](https://git-scm.com/downloads) y compruébalo con `git --version`.
+- **Git** guarda el historial de tu trabajo y lo sube a GitHub. Descárgalo desde [git-scm.com](https://git-scm.com/downloads). Igual que con Python, cierra la terminal y ábrela de nuevo al terminar, y compruébalo con `git --version`.
 - **Editor:** usa el que prefieras. Si no tienes uno, [Visual Studio Code](https://code.visualstudio.com/) es gratuito y funciona igual en los tres sistemas.
+
+Antes de seguir, dile a Git quién eres. Cada cambio que guardes llevará este nombre y este correo. Es obligatorio: sin esto, Git se niega a guardar.
+
+```bash
+git config --global user.name "Tu Nombre"
+git config --global user.email "tu@correo.com"
+```
+
+> Usa el mismo correo con el que creaste tu cuenta de GitHub. Si prefieres no mostrar tu correo personal, GitHub te da una dirección `noreply` en **Settings → Emails** que puedes usar aquí.
 
 ## Paso 3. Crea tu copia del curso
 
@@ -59,6 +70,12 @@ Créalo una sola vez:
 python -m venv .venv
 ```
 
+**En Windows, una sola vez, antes de activar:** PowerShell bloquea por defecto la ejecución de scripts, y activar el entorno es correr un script. Este comando le da permiso para los scripts de tu usuario. Corre esto y responde `S` (o `Y`) cuando pregunte:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
 Actívalo **cada vez que abras una terminal nueva**:
 
 | Sistema | Comando |
@@ -67,8 +84,6 @@ Actívalo **cada vez que abras una terminal nueva**:
 | macOS y Linux | `source .venv/bin/activate` |
 
 Sabrás que está activo porque la línea de la terminal empieza con `(.venv)`.
-
-> **Windows:** si PowerShell responde que la ejecución de scripts está deshabilitada, corre una sola vez `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, acepta y vuelve a activar el entorno.
 
 ## Paso 5. Instala las herramientas del curso
 
@@ -125,6 +140,13 @@ Abre `lecciones/leccion_00_preparacion/ejercicios.py`. Dentro está la función 
 3. En su lugar, escribe una línea que devuelva el texto pedido. Recuerda que una función entrega su resultado con la palabra `return`.
 4. Guarda el archivo y corre otra vez las pruebas.
 
+Así se ve una función que devuelve un texto. La tuya tendrá la misma forma, con otro nombre y otro texto:
+
+```python
+def despedir():
+    return "Hasta luego"
+```
+
 <details>
 <summary>Pista, por si te atoras</summary>
 
@@ -156,6 +178,11 @@ git commit -m "Completa la lección 0"
 git push
 ```
 
+> La primera vez que hagas `git push`, Git te pedirá iniciar sesión en GitHub. Es normal: necesita comprobar que el repositorio es tuyo.
+>
+> - **Windows:** Git trae un administrador de credenciales que abre una ventana del navegador. Inicia sesión con tu cuenta y Git guardará el acceso.
+> - **macOS, Linux, o si la terminal te pide usuario y contraseña:** el usuario es tu nombre de GitHub, pero la contraseña **no** es la de tu cuenta: GitHub ya no la acepta. Crea un token en GitHub, en **Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token**, marca el permiso **repo** y pégalo cuando te pida la contraseña (no se ve mientras lo pegas). Guárdalo en un lugar seguro: si tu sistema no lo recuerda, te lo volverá a pedir.
+
 Hazlo al terminar cada lección. Cada vez que subes cambios, GitHub corre las mismas pruebas y deja el resultado en la pestaña **Actions** de tu repositorio.
 
 ## Antes de seguir
@@ -171,7 +198,8 @@ Responde de memoria, sin volver a leer. Intentar recordar es lo que fija lo apre
 
 | Qué ves | Qué hacer |
 | --- | --- |
-| `python` no se reconoce como comando | En Windows, reinstala Python marcando **Add python.exe to PATH**. En macOS y Linux, prueba con `python3`. |
+| `python` no se reconoce como comando | Primero cierra la terminal y ábrela de nuevo. Si sigue igual, en Windows revisa los alias de la Microsoft Store (ver el aviso del paso 1) y, solo si nada de eso funciona, reinstala Python marcando **Add python.exe to PATH**. En macOS y Linux, prueba con `python3`. |
+| `la ejecución de scripts está deshabilitada en este sistema` | Falta el permiso de PowerShell. Corre `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` como se explica en el paso 4 y vuelve a activar el entorno. |
 | `pytest` no se reconoce como comando | El entorno virtual no está activo. Repite el paso 4. |
 | `No module named pytest` | Faltó el paso 5, o lo corriste sin activar el entorno. |
 | `ModuleNotFoundError: No module named 'lecciones'` | Estás en otra carpeta. Los comandos se corren desde la carpeta principal del curso. |

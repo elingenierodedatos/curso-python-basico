@@ -10,6 +10,7 @@ import pytest
 
 from lecciones.leccion_07_pruebas import funciones
 from lecciones.leccion_07_pruebas.ejercicios import (
+    aplicar_a_todos,
     casos_de_limpiar_precio,
     comprobar_contar_por_ciudad,
     comprobar_limites_de_clasificar_importe,
@@ -181,6 +182,61 @@ def nombres_usados(funcion):
         elif isinstance(nodo, ast.Attribute):
             nombres.add(nodo.attr)
     return nombres
+
+
+# --- Ejercicio 0: aplicar_a_todos ---
+
+
+def test_ejercicio_0_aplica_una_funcion_definida_en_la_prueba():
+    def obtener_ciudad(pedido):
+        return pedido["ciudad"]
+
+    pedidos = [{"ciudad": "Guadalajara"}, {"ciudad": "Tijuana"}]
+
+    resultado = aplicar_a_todos(pedidos, obtener_ciudad)
+
+    assert resultado == ["Guadalajara", "Tijuana"], (
+        "Con dos pedidos, de Guadalajara y Tijuana, y una función que devuelve "
+        "la ciudad, se esperaba ['Guadalajara', 'Tijuana'] y se obtuvo "
+        f"{resultado!r}. Llama a funcion con cada elemento y guarda lo que devuelve."
+    )
+
+
+def test_ejercicio_0_aplica_limpiar_precio_a_una_lista_de_textos():
+    textos = ["$45", " 1,250.50 ", "99.9"]
+
+    resultado = aplicar_a_todos(textos, funciones.limpiar_precio)
+
+    assert resultado == [45.0, 1250.5, 99.9], (
+        "Con tres precios como texto y la función limpiar_precio de funciones.py "
+        f"se esperaba [45.0, 1250.5, 99.9] y se obtuvo {resultado!r}. Dentro de "
+        "aplicar_a_todos no debe aparecer ningún nombre de función concreto: "
+        "solo se llama a la que llega en el parámetro."
+    )
+
+
+def test_ejercicio_0_con_lista_vacia_devuelve_lista_vacia():
+    resultado = aplicar_a_todos([], len)
+
+    assert resultado == [], (
+        f"Con una lista vacía se esperaba [] y se obtuvo {resultado!r}. "
+        "Si no hay elementos, la lista de resultados se queda vacía."
+    )
+
+
+def test_ejercicio_0_devuelve_una_lista_nueva_y_no_modifica_la_original():
+    pedidos = [{"ciudad": "Puebla", "cantidad": 2}, {"ciudad": "Mérida"}]
+
+    resultado = aplicar_a_todos(pedidos, len)
+
+    assert resultado == [2, 1], (
+        "Con un pedido de dos claves y otro de una, y la función len, se esperaba "
+        f"[2, 1] y se obtuvo {resultado!r}."
+    )
+    assert pedidos == [{"ciudad": "Puebla", "cantidad": 2}, {"ciudad": "Mérida"}], (
+        "aplicar_a_todos() cambió la lista que recibió: ahora vale "
+        f"{pedidos!r}. Guarda los resultados en una lista nueva."
+    )
 
 
 # --- Ejercicio 1: comprobar_limpiar_precio ---

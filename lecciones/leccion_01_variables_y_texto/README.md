@@ -101,6 +101,8 @@ Los textos tienen **métodos**: acciones que se piden con un punto después del 
 | `.title()` | Mayúscula al inicio de cada palabra | `"ana lópez".title()` | `'Ana López'` |
 | `.replace(a, b)` | El texto con `a` cambiado por `b` | `"1,250".replace(",", "")` | `'1250'` |
 
+> **Sobre `.title()` en español:** pone mayúscula a todas las palabras, incluidas las preposiciones. `"ciudad de méxico".title()` da `'Ciudad De México'`, con esa `De` que en español no se escribe así. Para nombres propios con reglas, como las ciudades, en el proyecto final lo combinarás con un diccionario de nombres oficiales. En esta lección basta con `.title()` tal como está.
+
 Dos ideas que evitan muchos errores:
 
 **Los métodos no cambian el texto original; devuelven uno nuevo.** Si no guardas el resultado, se pierde.
@@ -254,6 +256,49 @@ precio = float(precio_crudo.replace("$", "").replace(",", ""))
 ```
 
 Un buen comentario explica **por qué** se hace algo. El **qué** ya lo dice el código.
+
+### 9. Cómo entregas tu respuesta en los ejercicios: `def` y `return`
+
+Cada ejercicio de este curso es una función que tú completas. Para hacerlo solo necesitas reconocer cuatro piezas:
+
+```python
+def describir_pedido(producto, cantidad):
+    return f"{cantidad} piezas de {producto}"
+```
+
+- `def` define una función y le da un nombre, aquí `describir_pedido`.
+- Lo que va entre paréntesis son los datos que recibe. Dentro de la función los usas como variables normales.
+- Lo que va indentado con cuatro espacios es el **cuerpo**: las líneas que se ejecutan cuando alguien usa la función.
+- `return` **entrega el resultado**. Lo que pongas después de `return` es lo que recibe quien llamó a la función.
+
+Para usar la función la llamas por su nombre, con los datos entre paréntesis, y guardas lo que devuelve:
+
+```python
+descripcion = describir_pedido("Café de olla", 3)
+print(descripcion)
+```
+
+```text
+3 piezas de Café de olla
+```
+
+Un error muy común es usar `print` en lugar de `return`. `print` solo muestra el valor en pantalla y no entrega nada: la función devuelve `None`, y las pruebas lo reciben así aunque en pantalla se vea el texto correcto.
+
+```python
+def describir_pedido_mal(producto, cantidad):
+    print(f"{cantidad} piezas de {producto}")
+
+
+resultado = describir_pedido_mal("Café de olla", 3)
+print(resultado)
+```
+
+```text
+3 piezas de Café de olla
+None
+```
+
+Las funciones de `ejercicios.py` tienen exactamente esta forma. Tu trabajo es escribir el cuerpo y terminar con un `return`. En la lección 5 verás las funciones a fondo.
 
 ## Ejercicios
 

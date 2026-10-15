@@ -2,7 +2,7 @@
 
 Hasta ahora completaste funciones que alguien más había empezado. En esta lección las escribes tú desde la primera línea, las guardas en un módulo propio y las reutilizas desde otro archivo para limpiar pedidos completos.
 
-**Tiempo estimado:** 120 minutos.
+**Tiempo estimado:** 100 minutos.
 **Antes de empezar:** completa la [lección 4](../leccion_04_diccionarios/README.md) y activa tu entorno virtual.
 
 ## Qué vas a lograr
@@ -26,7 +26,7 @@ El módulo `limpieza.py` que escribes aquí es el mismo tipo de archivo que vas 
 
 1. Lee cada concepto y escribe los ejemplos tú mismo. No los copies y pegues: teclearlos es parte del aprendizaje.
 2. Corre `python lecciones/leccion_05_funciones_y_modulos/ejemplos.py` y cambia valores para ver qué pasa.
-3. Resuelve los ejercicios en orden, uno a la vez, corriendo las pruebas después de cada uno. Los ejercicios 4 a 7 usan las funciones de los ejercicios 1 a 3.
+3. Resuelve los ejercicios en orden, uno a la vez, corriendo las pruebas después de cada uno. Los ejercicios 4 a 6 usan las funciones de los ejercicios 1 a 3.
 4. Hazlo sin asistentes de IA. La explicación está en [docs/por-que-sin-ia.md](../../docs/por-que-sin-ia.md).
 
 ## Conceptos
@@ -252,41 +252,7 @@ print(total_con_descuento)
 
 Python resuelve primero la llamada de dentro (`calcular_total(2, 350.0)` da `700.0`) y con ese valor llama a la de fuera. Una función también puede llamar a otra dentro de su cuerpo, y eso es justo lo que harás en los ejercicios: `es_faltante` usa `limpiar_texto`, y `limpiar_pedido` usa las tres.
 
-### 10. Las funciones también son valores
-
-El nombre de una función, **sin paréntesis**, se refiere a la función misma. Con paréntesis, la llama.
-
-| Escribes | Qué es |
-| --- | --- |
-| `obtener_ciudad(pedido)` | El resultado de llamar a la función: una ciudad. |
-| `obtener_ciudad` | La función, sin ejecutarla. |
-
-Como es un valor, una función se puede enviar como argumento a otra, que decide cuándo llamarla:
-
-```python
-def obtener_ciudad(pedido):
-    """Devuelve la ciudad de un pedido."""
-    return pedido["ciudad"]
-
-
-def mostrar_de_cada_pedido(pedidos, funcion):
-    """Imprime el resultado de llamar funcion(pedido) con cada pedido."""
-    for pedido in pedidos:
-        print(funcion(pedido))
-
-
-pedidos = [{"ciudad": "Puebla"}, {"ciudad": "Mérida"}]
-mostrar_de_cada_pedido(pedidos, obtener_ciudad)
-```
-
-```text
-Puebla
-Mérida
-```
-
-Dentro de `mostrar_de_cada_pedido`, el parámetro `funcion` es un nombre más para `obtener_ciudad`, y `funcion(pedido)` la llama. El mismo bucle sirve para cualquier función que reciba un pedido. Por ahora basta con esta idea; la usarás en el ejercicio 7.
-
-### 11. Módulos
+### 10. Módulos
 
 Un **módulo** es un archivo `.py`. Nada más. Las funciones que defines en un archivo se pueden usar desde otro con `import`.
 
@@ -330,7 +296,7 @@ Se lee: "de la carpeta `lecciones`, de la carpeta `leccion_05_funciones_y_modulo
 
 **El bloque `if __name__ == "__main__":`.** Al importar un módulo, Python ejecuta todo el archivo. Si no quieres que una parte corra al importarlo, ponla dentro de este bloque: solo se ejecuta cuando corres el archivo directamente. Compruébalo: `python lecciones/leccion_05_funciones_y_modulos/formato.py` imprime una demostración, y esa demostración no aparece cuando `ejemplos.py` importa el módulo.
 
-### 12. Estilo de las funciones
+### 11. Estilo de las funciones
 
 El estilo que sigue casi todo el código de Python está escrito en una guía llamada PEP 8. Para funciones pide:
 
@@ -353,7 +319,7 @@ Esta lección tiene dos archivos de trabajo.
 | Archivo | Ejercicios | Qué haces |
 | --- | --- | --- |
 | `limpieza.py` | 1, 2 y 3 | El archivo está casi vacío. Escribes cada función completa, desde `def`. |
-| `ejercicios.py` | 4, 5, 6 y 7 | Como en las lecciones anteriores: borras el `raise NotImplementedError(...)` y completas el cuerpo, reutilizando las funciones de `limpieza.py`. |
+| `ejercicios.py` | 4, 5 y 6 | Como en las lecciones anteriores: borras el `raise NotImplementedError(...)` y completas el cuerpo, reutilizando las funciones de `limpieza.py`. |
 
 Mientras una función de `limpieza.py` no exista, sus pruebas fallan con este mensaje:
 
@@ -571,46 +537,15 @@ Vuelve a la sección "Devolver varios valores". El orden en el `return` es el or
 
 </details>
 
-### Ejercicio 7. `aplicar_a_todos(pedidos, funcion)`
-
-En `ejercicios.py`. Recibe una lista de pedidos y una función. Devuelve una lista nueva con el resultado de llamar a esa función con cada pedido.
-
-| Entrada | Resultado |
-| --- | --- |
-| `aplicar_a_todos(pedidos_crudos, limpiar_pedido)` | Lista con cada pedido ya limpio |
-| `aplicar_a_todos(pedidos, obtener_ciudad)` | `['Guadalajara', 'Tijuana']` |
-| `aplicar_a_todos([], limpiar_pedido)` | `[]` |
-
-Paso a paso:
-
-1. Crea una lista vacía para los resultados.
-2. Recorre los pedidos.
-3. Llama a la función recibida con cada pedido y agrega a la lista lo que devuelva.
-4. Devuelve la lista.
-
-<details>
-<summary>Pista 1</summary>
-
-El parámetro `funcion` guarda una función. Para llamarla se usa como cualquier otra: su nombre y, entre paréntesis, el argumento.
-
-</details>
-
-<details>
-<summary>Pista 2</summary>
-
-Dentro de `aplicar_a_todos` no debe aparecer el nombre `limpiar_pedido`. La función no sabe cuál le van a enviar, y por eso sirve para todas. Compara con `mostrar_de_cada_pedido` en `ejemplos.py`: allá se imprime cada resultado, aquí se guarda.
-
-</details>
-
 ## Evalúate
 
-Cuando termines los siete ejercicios, corre la lección completa:
+Cuando termines los seis ejercicios, corre la lección completa:
 
 ```bash
 pytest lecciones/leccion_05_funciones_y_modulos
 ```
 
-Debes ver `57 passed`. Si una prueba falla, lee la línea que empieza con `E`: te dice con qué valores se probó, qué se esperaba y qué devolvió tu función.
+Debes ver `53 passed`. Si una prueba falla, lee la línea que empieza con `E`: te dice con qué valores se probó, qué se esperaba y qué devolvió tu función.
 
 Revisa también el estilo de tu código. El primer comando avisa de nombres e imports fuera de estilo; el segundo acomoda por ti el formato, incluidas las dos líneas en blanco entre funciones:
 
@@ -646,10 +581,9 @@ Responde de memoria antes de pasar a la siguiente lección. Si no recuerdas algo
 2. ¿Qué devuelve una función que no tiene `return`? ¿Qué error aparece si multiplicas ese resultado por un número?
 3. Con `def aplicar_descuento(total, porcentaje=10)`, ¿qué devuelve `aplicar_descuento(200)`? ¿Y `aplicar_descuento(200, porcentaje=50)`?
 4. ¿Por qué no puedes usar fuera de una función una variable que creaste dentro de ella? ¿Qué error aparece?
-5. ¿Qué diferencia hay entre escribir `limpiar_pedido` y `limpiar_pedido(pedido)`?
-6. ¿Qué diferencia hay entre `import limpieza` y `from limpieza import limpiar_texto` a la hora de llamar a la función?
-7. De la lección 4: ¿qué devuelve `pedido.get("ciudad")` si el diccionario no tiene esa clave?
-8. De la lección 2: ¿cómo se llama el patrón de crear una lista vacía antes de un bucle y llenarla dentro de él?
+5. ¿Qué diferencia hay entre `import limpieza` y `from limpieza import limpiar_texto` a la hora de llamar a la función?
+6. De la lección 4: ¿qué devuelve `pedido.get("ciudad")` si el diccionario no tiene esa clave?
+7. De la lección 2: ¿cómo se llama el patrón de crear una lista vacía antes de un bucle y llenarla dentro de él?
 
 Vuelve a estas preguntas dentro de dos o tres días. Repasar espaciado en el tiempo rinde más que repasar muchas veces el mismo día.
 

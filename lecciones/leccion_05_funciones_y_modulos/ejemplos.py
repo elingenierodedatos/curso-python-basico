@@ -35,17 +35,6 @@ def calcular_minimo_y_maximo(precios):
     return ordenados[0], ordenados[-1]
 
 
-def obtener_ciudad(pedido):
-    """Devuelve la ciudad de un pedido."""
-    return pedido["ciudad"]
-
-
-def mostrar_de_cada_pedido(pedidos, funcion):
-    """Imprime el resultado de llamar funcion(pedido) con cada pedido."""
-    for pedido in pedidos:
-        print(funcion(pedido))
-
-
 def saludar_sin_return(nombre):
     """Imprime un saludo, pero no devuelve nada."""
     print(f"Hola, {nombre}")
@@ -78,7 +67,7 @@ print(maximo)  # 890.0
 total_con_descuento = aplicar_descuento(calcular_total(2, 350.0), 15)
 print(total_con_descuento)  # 595.0
 
-# --- Funciones como valores: se pasan sin paréntesis ---
+# --- Una lista de pedidos para los ejemplos que siguen ---
 pedidos = [
     {
         "ciudad": "Puebla",
@@ -94,12 +83,11 @@ pedidos = [
     },
 ]
 
-mostrar_de_cada_pedido(pedidos, obtener_ciudad)  # Puebla, Mérida
-
 # --- Módulos: funciones que viven en otro archivo ---
 print(math.ceil(7 / 6))  # 2: cajas de seis piezas para enviar siete
 print(formato.formatear_importe(total))  # $136.50 MXN
 print(describir_pedido(pedidos[0]))  # 2 x Taza de barro: $240.00 MXN
 
-# Una función importada también es un valor que se puede pasar.
-mostrar_de_cada_pedido(pedidos, describir_pedido)
+# Una función importada se usa igual que una definida aquí.
+for pedido in pedidos:
+    print(describir_pedido(pedido))

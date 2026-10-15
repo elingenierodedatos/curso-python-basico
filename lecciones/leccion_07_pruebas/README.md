@@ -2,7 +2,7 @@
 
 Llevas seis lecciones corriendo pruebas que escribimos nosotros y leyendo sus fallos. En esta lección cambias de lado: las pruebas las escribes tú, y nosotros evaluamos qué tan bien cuidan el código.
 
-**Tiempo estimado:** 120 minutos.
+**Tiempo estimado:** 140 minutos.
 **Antes de empezar:** completa la [lección 6](../leccion_06_archivos_y_errores/README.md) y activa tu entorno virtual.
 
 ## Qué vas a lograr
@@ -34,7 +34,7 @@ Los archivos de la carpeta tienen papeles distintos:
 | Archivo | Qué es | ¿Lo editas? |
 | --- | --- | --- |
 | `funciones.py` | Cuatro funciones del negocio, ya resueltas y correctas | No, salvo en el concepto 3 |
-| `ejercicios.py` | Las comprobaciones de los ejercicios 1 a 5 | Sí |
+| `ejercicios.py` | El calentamiento del ejercicio 0 y las comprobaciones de los ejercicios 1 a 5 | Sí |
 | `test_mis_pruebas.py` | Tu archivo de pruebas, ejercicio 6 | Sí |
 | `test_ejercicios.py` | Nuestras pruebas, que evalúan las tuyas | No |
 | `ejemplos.py`, `ejemplos_de_pruebas.py` | Ejemplos resueltos | Si quieres experimentar |
@@ -42,6 +42,37 @@ Los archivos de la carpeta tienen papeles distintos:
 Antes de seguir, abre `funciones.py` y lee los cuatro docstrings. Son las funciones que vas a cuidar: `limpiar_precio`, `clasificar_importe`, `validar_cantidad` y `contar_por_ciudad`.
 
 ## Conceptos
+
+### 0. Antes de empezar: las funciones también son valores
+
+En esta lección vas a escribir funciones que reciben otra función como argumento. Para eso hace falta una idea que en la lección 5 no necesitabas: el nombre de una función, **sin paréntesis**, se refiere a la función misma. Con paréntesis, la llama.
+
+| Escribes | Qué es |
+| --- | --- |
+| `limpiar_precio("$45")` | El resultado de llamar a la función: un número. |
+| `limpiar_precio` | La función, sin ejecutarla. |
+
+Como es un valor, una función se puede guardar en una variable y se puede enviar como argumento a otra función, que decide cuándo llamarla:
+
+```python
+from lecciones.leccion_07_pruebas.funciones import limpiar_precio
+
+
+def mostrar_de_cada_uno(textos, funcion):
+    """Imprime el resultado de llamar funcion(texto) con cada texto."""
+    for texto in textos:
+        print(funcion(texto))
+
+
+mostrar_de_cada_uno(["$45", " 1,250.50 "], limpiar_precio)
+```
+
+```text
+45.0
+1250.5
+```
+
+Dentro de `mostrar_de_cada_uno`, el parámetro `funcion` es un nombre más para `limpiar_precio`, y `funcion(texto)` la llama. El mismo bucle sirve para cualquier función que reciba un texto. En `ejemplos.py` hay otro caso, `funcion_elegida = calcular_total`, y las comprobaciones de los ejercicios 1 a 5 se apoyan en esta misma idea: reciben la función que deben revisar. El ejercicio 0 es un calentamiento para practicarla antes de escribir pruebas.
 
 ### 1. Qué es una prueba unitaria
 
@@ -225,10 +256,18 @@ La línea que empieza con `@` es un decorador: una etiqueta que se pone encima d
 
 pytest corre la prueba una vez por tupla, y cada corrida cuenta como una prueba aparte: si el segundo caso falla, los otros dos siguen pasando y sabes exactamente cuál se rompió.
 
-Con `ids` le pones nombre a cada caso. Agrega este argumento después de la lista:
+Con `ids` le pones nombre a cada caso. Es un argumento más del decorador y va después de la lista de casos. Así queda el decorador completo:
 
 ```python
-ids = (["caso_normal", "redondeo", "cantidad_cero"],)
+@pytest.mark.parametrize(
+    ("cantidad", "precio_unitario", "esperado"),
+    [
+        (3, 19.99, 59.97),
+        (3, 0.1, 0.3),
+        (0, 99.9, 0.0),
+    ],
+    ids=["caso_normal", "redondeo", "cantidad_cero"],
+)
 ```
 
 ```bash
@@ -369,9 +408,9 @@ Por eso `ejemplos_de_pruebas.py` no corre cuando evalúas la carpeta: su nombre 
 
 ## Ejercicios
 
-Los ejercicios 1 a 5 se resuelven en `ejercicios.py` y el 6 en `test_mis_pruebas.py`.
+Los ejercicios 0 a 5 se resuelven en `ejercicios.py` y el 6 en `test_mis_pruebas.py`. El ejercicio 0 es un calentamiento con funciones como valores, y a partir del 1 escribes pruebas.
 
-En esta lección no escribes las funciones del negocio: escribes **comprobaciones**. Una comprobación es una función que recibe como parámetro la función que debe revisar y la pone a prueba con `assert`. Esto funciona porque en Python una función es un valor más: si escribes su nombre sin paréntesis no la llamas, solo la nombras, y así se puede pasar como argumento.
+En esta lección no escribes las funciones del negocio: escribes **comprobaciones**. Una comprobación es una función que recibe como parámetro la función que debe revisar y la pone a prueba con `assert`. Esto funciona por lo que viste en el concepto 0: una función es un valor más, y si escribes su nombre sin paréntesis no la llamas, solo la nombras, y así se puede pasar como argumento.
 
 ```python
 def comprobar_calcular_total(calcular_total):
@@ -399,6 +438,37 @@ Después de cada ejercicio corre sus pruebas. Por ejemplo, para el ejercicio 1:
 ```bash
 pytest lecciones/leccion_07_pruebas/test_ejercicios.py -k ejercicio_1
 ```
+
+### Ejercicio 0. Calentamiento: `aplicar_a_todos(pedidos, funcion)`
+
+En `ejercicios.py`. Recibe una lista y una función. Devuelve una lista nueva con el resultado de llamar a esa función con cada elemento. No es una prueba todavía: es el patrón de "recibir una función y llamarla" que usan todas las comprobaciones que siguen.
+
+| Entrada | Resultado |
+| --- | --- |
+| `aplicar_a_todos(["$45", " 1,250.50 "], limpiar_precio)` | `[45.0, 1250.5]` |
+| `aplicar_a_todos(pedidos, obtener_ciudad)` | `['Guadalajara', 'Tijuana']` |
+| `aplicar_a_todos([], limpiar_precio)` | `[]` |
+
+Paso a paso:
+
+1. Crea una lista vacía para los resultados.
+2. Recorre los elementos recibidos.
+3. Llama a la función recibida con cada elemento y agrega a la lista lo que devuelva.
+4. Devuelve la lista.
+
+<details>
+<summary>Pista 1</summary>
+
+El parámetro `funcion` guarda una función. Para llamarla se usa como cualquier otra: su nombre y, entre paréntesis, el argumento.
+
+</details>
+
+<details>
+<summary>Pista 2</summary>
+
+Dentro de `aplicar_a_todos` no debe aparecer el nombre `limpiar_precio` ni ningún otro nombre concreto. La función no sabe cuál le van a enviar, y por eso sirve para todas. Compara con `mostrar_de_cada_uno` en el concepto 0: allá se imprime cada resultado, aquí se guarda.
+
+</details>
 
 ### Ejercicio 1. `comprobar_limpiar_precio(limpiar_precio)`
 
@@ -611,15 +681,15 @@ Haz con una de tus pruebas lo mismo que en el concepto 3: rompe a propósito la 
 
 ## Evalúate
 
-Cuando termines los seis ejercicios, corre nuestras pruebas:
+Cuando termines los siete ejercicios, corre nuestras pruebas:
 
 ```bash
 pytest lecciones/leccion_07_pruebas/test_ejercicios.py
 ```
 
-Debes ver `37 passed`. Si una prueba falla, lee el mensaje completo: te dice si tu comprobación falló con la función correcta o qué defecto se le escapó.
+Debes ver `41 passed`. Si una prueba falla, lee el mensaje completo: te dice si tu comprobación falló con la función correcta o qué defecto se le escapó.
 
-Si corres la carpeta completa, pytest también descubre tu archivo y suma tus pruebas al total: verás 37 más las que hayas escrito, todas en `passed`.
+Si corres la carpeta completa, pytest también descubre tu archivo y suma tus pruebas al total: verás 41 más las que hayas escrito, todas en `passed`.
 
 ```bash
 pytest lecciones/leccion_07_pruebas
@@ -649,8 +719,9 @@ Responde de memoria antes de pasar a la siguiente lección. Si no recuerdas algo
 4. Una prueba falla después de un cambio en el código. ¿Cómo decides si arreglas el código o la prueba?
 5. ¿Qué pasa con una prueba que usa `pytest.raises(ValueError)` si la función no lanza ningún error?
 6. ¿Por qué un límite se prueba con el valor exacto y con el inmediato anterior?
-7. De la lección 6: en un bloque `try`, ¿cuándo se ejecuta la parte `else`?
-8. De la lección 4: ¿qué devuelve `conteo.get("puebla", 0)` si la clave no existe, y por qué eso sirve para contar?
+7. ¿Qué diferencia hay entre escribir `limpiar_precio` y `limpiar_precio(texto)`?
+8. De la lección 6: en un bloque `try`, ¿cuándo se ejecuta la parte `else`?
+9. De la lección 4: ¿qué devuelve `conteo.get("puebla", 0)` si la clave no existe, y por qué eso sirve para contar?
 
 Vuelve a estas preguntas dentro de dos o tres días. Repasar espaciado en el tiempo rinde más que repasar muchas veces el mismo día.
 

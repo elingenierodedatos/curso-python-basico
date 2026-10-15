@@ -1,7 +1,7 @@
 """Lección 5: funciones y módulos.
 
 Antes de empezar aquí, escribe las funciones de los ejercicios 1, 2 y 3
-en limpieza.py. Las cuatro funciones de este archivo las reutilizan.
+en limpieza.py. Las tres funciones de este archivo las reutilizan.
 
 Completa las funciones en orden. Cada una tiene su guía paso a paso
 en el README de esta carpeta.
@@ -73,19 +73,3 @@ def separar_validos(pedidos):
     """
     # Borra la línea de abajo y escribe tu código en su lugar.
     raise NotImplementedError("Aún no completas la función separar_validos().")
-
-
-def aplicar_a_todos(pedidos, funcion):
-    """Devuelve una lista con el resultado de llamar funcion(pedido) con cada pedido.
-
-    El parámetro funcion recibe una función, que se llama aquí dentro.
-
-    Ejemplo:
-        >>> def obtener_ciudad(pedido):
-        ...     return pedido["ciudad"]
-        >>> aplicar_a_todos([{"ciudad": "Puebla"}, {"ciudad": "Mérida"}],
-        ...                 obtener_ciudad)
-        ['Puebla', 'Mérida']
-    """
-    # Borra la línea de abajo y escribe tu código en su lugar.
-    raise NotImplementedError("Aún no completas la función aplicar_a_todos().")

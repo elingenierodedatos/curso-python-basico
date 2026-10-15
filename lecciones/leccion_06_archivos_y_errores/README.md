@@ -20,7 +20,7 @@ Un flujo de datos casi siempre empieza leyendo un archivo y termina escribiendo 
 
 Hay dos formas de fallar. Un programa que se detiene con un error es molesto, pero honesto: sabes que algo anda mal. Un programa que ignora el problema y sigue adelante entrega un total equivocado sin avisar, y alguien toma decisiones con esa cifra. Aquí aprendes a elegir, en cada caso, entre detenerte, usar un valor por defecto o rechazar el dato, y a que esa elección quede a la vista.
 
-Las funciones `leer_csv` y `escribir_csv` que escribas en esta lección son la entrada y la salida del proyecto final.
+La lógica de `leer_csv` y `escribir_csv` que escribas en esta lección es la entrada y la salida del proyecto final, aunque allí las funciones tengan otros nombres: `leer_pedidos` lee el archivo crudo y `guardar_rechazados` escribe los pedidos que no pasaron la limpieza.
 
 ## Cómo trabajar esta lección
 
@@ -838,7 +838,7 @@ Cuando termines los siete ejercicios, corre la lección completa:
 pytest lecciones/leccion_06_archivos_y_errores
 ```
 
-Debes ver `62 passed`. Si una prueba falla, lee la línea que empieza con `E`: te dice con qué valores se probó, qué se esperaba y qué devolvió tu función.
+Debes ver `63 passed`. Si una prueba falla, lee la línea que empieza con `E`: te dice con qué valores se probó, qué se esperaba y qué devolvió tu función.
 
 Revisa también el estilo de tu código:
 

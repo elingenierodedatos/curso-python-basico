@@ -1,8 +1,10 @@
 """Lección 7: pruebas con pytest.
 
 En esta lección no completas funciones del negocio: escribes las
-comprobaciones que las cuidan. Cada función de este archivo recibe como
-parámetro la función que debe revisar y la pone a prueba con `assert`.
+comprobaciones que las cuidan. El ejercicio 0 es un calentamiento: una
+función que recibe otra función y la llama. Cada una de las comprobaciones
+que siguen recibe como parámetro la función que debe revisar y la pone a
+prueba con `assert`.
 
 Nuestras pruebas llaman a cada comprobación tuya varias veces: una con la
 función correcta de `funciones.py`, que debe pasar sin error, y otras con
@@ -21,6 +23,24 @@ Para evaluar un solo ejercicio, por ejemplo el 3:
 """
 
 import pytest  # noqa: F401  (lo vas a usar en el ejercicio 3)
+
+
+def aplicar_a_todos(pedidos, funcion):
+    """Devuelve una lista con el resultado de llamar funcion(elemento) con cada uno.
+
+    El parámetro funcion recibe una función, que se llama aquí dentro. La
+    lista puede traer pedidos, textos o cualquier otra cosa que esa función
+    sepa recibir.
+
+    Ejemplo:
+        >>> def obtener_ciudad(pedido):
+        ...     return pedido["ciudad"]
+        >>> aplicar_a_todos([{"ciudad": "Puebla"}, {"ciudad": "Mérida"}],
+        ...                 obtener_ciudad)
+        ['Puebla', 'Mérida']
+    """
+    # Borra la línea de abajo y escribe tu código en su lugar.
+    raise NotImplementedError("Aún no completas la función aplicar_a_todos().")
 
 
 def comprobar_limpiar_precio(limpiar_precio):

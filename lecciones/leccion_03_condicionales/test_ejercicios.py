@@ -46,6 +46,17 @@ def test_ejercicio_1_rechaza_lo_que_no_es_entero(cantidad):
     )
 
 
+@pytest.mark.parametrize("cantidad", [True, False])
+def test_ejercicio_1_rechaza_booleanos(cantidad):
+    resultado = es_cantidad_valida(cantidad)
+
+    assert resultado is False, (
+        f"Con cantidad={cantidad!r} se esperaba False y se obtuvo {resultado!r}. "
+        "Para Python, True y False también son enteros. Revisa al final del "
+        "concepto 4 cómo excluirlos."
+    )
+
+
 # --- Ejercicio 2: clasificar_importe ---
 
 

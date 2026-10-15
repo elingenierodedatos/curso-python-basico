@@ -622,7 +622,7 @@ No necesitas revisar si la ciudad ya está antes de agregarla. El conjunto ignor
 
 ### Ejercicio 7. `pedido_mas_grande(pedidos)`
 
-Devuelve el pedido con el mayor importe (cantidad por precio unitario). Se devuelve el diccionario completo, no el importe. Si la lista está vacía devuelve `None`. Si hay empate, devuelve el que aparece primero en la lista.
+Devuelve el pedido con el mayor importe (cantidad por precio unitario, redondeado a dos decimales). Se devuelve el diccionario completo, no el importe. Si la lista está vacía devuelve `None`. Si hay empate, devuelve el que aparece primero en la lista.
 
 | Entrada | Resultado |
 | --- | --- |
@@ -633,7 +633,7 @@ Paso a paso:
 
 1. Crea dos variables antes del bucle: una para el pedido mayor encontrado hasta el momento, que empieza en `None`, y otra para su importe.
 2. Recorre la lista de pedidos.
-3. En cada vuelta, calcula el importe del pedido.
+3. En cada vuelta, calcula el importe del pedido, redondeado a dos decimales como en los ejercicios anteriores. Sin el redondeo, `3 * 0.1` vale `0.30000000000000004` y un empate real se decide mal.
 4. Si todavía no hay un pedido mayor, o si este importe supera al mayor que llevas, guarda este pedido y su importe en las dos variables.
 5. Al terminar el bucle, devuelve el pedido mayor.
 
@@ -666,7 +666,7 @@ Cuando termines los siete ejercicios, corre la lección completa:
 pytest lecciones/leccion_04_diccionarios
 ```
 
-Debes ver `34 passed`. Si una prueba falla, lee la línea que empieza con `E`: te dice con qué valores se probó, qué se esperaba y qué devolvió tu función.
+Debes ver `35 passed`. Si una prueba falla, lee la línea que empieza con `E`: te dice con qué valores se probó, qué se esperaba y qué devolvió tu función.
 
 Revisa también el estilo de tu código:
 
