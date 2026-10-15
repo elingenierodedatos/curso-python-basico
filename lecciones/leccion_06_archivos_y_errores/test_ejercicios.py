@@ -1,10 +1,13 @@
 """Pruebas de la lección 6. No modifiques este archivo."""
 
+import ast
 import csv
+import inspect
 import json
 
 import pytest
 
+from lecciones.leccion_06_archivos_y_errores import ejercicios
 from lecciones.leccion_06_archivos_y_errores.ejercicios import (
     a_entero,
     contar_lineas,
@@ -28,6 +31,34 @@ FILAS = [
     {"id_pedido": "1003", "cliente": "Diego Castañeda", "ciudad": "Tijuana"},
 ]
 COLUMNAS = ["id_pedido", "cliente", "ciudad"]
+
+
+def leer_arbol_de(funcion):
+    """Devuelve la estructura del código fuente de una función para inspeccionarla."""
+    codigo = inspect.getsource(funcion)
+    return ast.parse(codigo)
+
+
+def alguna_llamada_a_open_lleva_newline_vacio(funcion):
+    """Dice si dentro de la función hay un open(...) o ruta.open(...) con newline=""."""
+    for nodo in ast.walk(leer_arbol_de(funcion)):
+        if not isinstance(nodo, ast.Call):
+            continue
+        es_open_global = isinstance(nodo.func, ast.Name) and nodo.func.id == "open"
+        es_open_de_ruta = (
+            isinstance(nodo.func, ast.Attribute) and nodo.func.attr == "open"
+        )
+        if not es_open_global and not es_open_de_ruta:
+            continue
+        for argumento in nodo.keywords:
+            if (
+                argumento.arg == "newline"
+                and isinstance(argumento.value, ast.Constant)
+                and argumento.value.value == ""
+            ):
+                return True
+    return False
+
 
 # --- Ejercicio 1: contar_lineas ---
 
@@ -284,11 +315,30 @@ def test_ejercicio_4_no_deja_lineas_en_blanco_entre_filas(tmp_path):
     ruta = tmp_path / "pedidos.csv"
 
     escribir_csv(ruta, FILAS, COLUMNAS)
-    lineas = ruta.read_text(encoding="utf-8").splitlines()
+    contenido = ruta.read_bytes()
+    lineas = contenido.decode("utf-8").splitlines()
 
+    assert b"\r\r\n" not in contenido, (
+        "El archivo tiene finales de línea dobles (\\r\\r\\n): es la marca de "
+        "haber abierto el archivo sin newline=''. En Windows eso deja una línea "
+        "en blanco entre fila y fila. Revisa el argumento newline al abrir."
+    )
     assert len(lineas) == 4 and "" not in lineas, (
         "Con encabezado y 3 filas se esperaban 4 líneas, ninguna vacía, "
         f"y se obtuvo {lineas!r}. Revisa el argumento newline al abrir el archivo."
+    )
+
+
+def test_ejercicio_4_abre_el_archivo_con_newline_vacio():
+    # En macOS y Linux el archivo sale bien aunque falte newline="", así que la
+    # prueba anterior no lo nota. Aquí se revisa el código fuente directamente,
+    # para que el mismo código funcione también en Windows.
+    assert alguna_llamada_a_open_lleva_newline_vacio(ejercicios.escribir_csv), (
+        "En escribir_csv() no se encontró ninguna llamada a open() con el "
+        "argumento newline=''. Sin él, en Windows el módulo csv y Python "
+        "traducen los finales de línea por separado y el archivo queda con una "
+        "línea en blanco entre fila y fila. Abre siempre el archivo con "
+        "encoding='utf-8', newline='' cuando uses el módulo csv."
     )
 
 
