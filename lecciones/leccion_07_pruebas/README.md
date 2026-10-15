@@ -644,10 +644,13 @@ Completa tu archivo de pruebas. Ya tiene la prueba que escribiste en el concepto
 | Requisito | Cómo lo revisamos |
 | --- | --- |
 | Al menos tres funciones `test_` | Contamos las funciones del archivo con ese prefijo |
-| Cada una comprueba algo | Buscamos un `assert` o un `pytest.raises` en cada una |
+| Cada una comprueba algo | Buscamos un `assert` o un `pytest.raises` en cada una. Un `assert` que no usa ningún valor, como `assert True`, no cuenta |
 | Al menos una está parametrizada | Buscamos la etiqueta `@pytest.mark.parametrize` |
 | Usan al menos tres de las cuatro funciones de `funciones.py` | Buscamos sus nombres dentro de tus pruebas |
-| Todas pasan | Corremos pytest sobre tu archivo |
+| Todas pasan | Corremos pytest sobre tu archivo con el `funciones.py` de la lección |
+| Detectan defectos | Corremos pytest sobre tu archivo con copias de `funciones.py` en las que una función tiene un defecto: las mismas versiones defectuosas de los ejercicios 1 a 4. Con cada función que uses, al menos una de esas versiones debe hacer fallar alguna prueba tuya |
+
+Las dos últimas filas son el mismo criterio que aplicamos a tus comprobaciones de los ejercicios 1 a 4, ahora sobre un archivo de pruebas de verdad: una prueba vale si pasa con la función correcta y falla con la defectuosa. Si el mensaje dice que a tus pruebas se les escaparon defectos, te enumera cuáles, por función.
 
 Paso a paso:
 
@@ -675,7 +678,7 @@ Si pytest responde `function uses no argument 'texto'`, los nombres del primer a
 <details>
 <summary>Pista 3</summary>
 
-Haz con una de tus pruebas lo mismo que en el concepto 3: rompe a propósito la función que cuida, mira si la prueba falla y deshaz el cambio. Si no falla, la prueba todavía no cuida nada.
+Haz con una de tus pruebas lo mismo que en el concepto 3: rompe a propósito la función que cuida, mira si la prueba falla y deshaz el cambio. Si no falla, la prueba todavía no cuida nada. Es justo lo que hacen nuestras pruebas con tu archivo, con un defecto distinto cada vez: una prueba que solo llama a la función, o que compara contra algo que cualquier versión cumple, no detecta ninguno.
 
 </details>
 
@@ -687,9 +690,9 @@ Cuando termines los siete ejercicios, corre nuestras pruebas:
 pytest lecciones/leccion_07_pruebas/test_ejercicios.py
 ```
 
-Debes ver `41 passed`. Si una prueba falla, lee el mensaje completo: te dice si tu comprobación falló con la función correcta o qué defecto se le escapó.
+Debes ver `42 passed`. Si una prueba falla, lee el mensaje completo: te dice si tu comprobación falló con la función correcta o qué defecto se le escapó.
 
-Si corres la carpeta completa, pytest también descubre tu archivo y suma tus pruebas al total: verás 41 más las que hayas escrito, todas en `passed`.
+Si corres la carpeta completa, pytest también descubre tu archivo y suma tus pruebas al total: verás 42 más las que hayas escrito, todas en `passed`.
 
 ```bash
 pytest lecciones/leccion_07_pruebas
