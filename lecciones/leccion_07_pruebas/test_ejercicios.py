@@ -721,21 +721,24 @@ PYTEST_HUBO_PRUEBAS_FALLIDAS = 1
 def correr_las_pruebas_del_alumno_contra(funciones_py):
     """Corre test_mis_pruebas.py con pytest usando ese texto como funciones.py.
 
-    Copia los archivos de la lección a una carpeta temporal, con la misma
-    estructura de paquetes para que los imports del alumno sigan funcionando,
-    reemplaza funciones.py por el texto recibido y corre pytest ahí dentro.
-    Devuelve el proceso terminado.
+    Copia la carpeta lecciones completa a una carpeta temporal, con la misma
+    estructura de paquetes, para que los imports del alumno sigan funcionando
+    aunque usen otra lección. Reemplaza funciones.py por el texto recibido y
+    corre pytest ahí dentro. Devuelve el proceso terminado.
     """
-    with tempfile.TemporaryDirectory() as temporal:
+    # ignore_cleanup_errors: en Windows, un antivirus puede tener abierto algún
+    # .pyc al borrar la carpeta; eso no debe convertirse en un error del alumno.
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as temporal:
         raiz = Path(temporal)
+        shutil.copytree(
+            RAIZ / "lecciones",
+            raiz / "lecciones",
+            ignore=shutil.ignore_patterns("__pycache__", ".pytest_cache", "salida"),
+        )
+        (raiz / "lecciones" / "__init__.py").touch()
         paquete = raiz / "lecciones" / "leccion_07_pruebas"
-        paquete.mkdir(parents=True)
         # Un pytest.ini vacío evita que pytest busque otra configuración.
         (raiz / "pytest.ini").write_text("", encoding="utf-8")
-        (raiz / "lecciones" / "__init__.py").write_text("", encoding="utf-8")
-        for archivo in CARPETA.glob("*.py"):
-            if archivo.name not in {"test_ejercicios.py", "funciones.py"}:
-                shutil.copy(archivo, paquete / archivo.name)
         (paquete / "funciones.py").write_text(funciones_py, encoding="utf-8")
 
         entorno = dict(os.environ)
