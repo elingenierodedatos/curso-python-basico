@@ -61,6 +61,9 @@ jobs:
         if: always()
         run: ruff check .
 
-      - name: Revisar el formato
+      # Informativo mientras las lecciones no enseñen "ruff format": si hay
+      # archivos sin formato, el paso lo marca, pero no pone el job en rojo.
+      - name: Revisar el formato (informativo)
         if: always()
+        continue-on-error: true
         run: ruff format --check .
