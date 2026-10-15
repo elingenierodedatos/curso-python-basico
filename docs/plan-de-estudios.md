@@ -43,15 +43,15 @@ Cada decisión de diseño tiene un sustento. Estas son las principales.
 | 0 | Preparación | 45 min | 2 |
 | 1 | Variables, texto y números | 90 min | 29 |
 | 2 | Listas y bucles | 120 min | 36 |
-| 3 | Decisiones con if y bucles while | 100 min | 62 |
-| 4 | Diccionarios y conjuntos | 120 min | 34 |
-| 5 | Funciones y módulos | 120 min | 57 |
-| 6 | Archivos y manejo de errores | 120 min | 62 |
-| 7 | Pruebas con pytest | 120 min | 37 |
+| 3 | Decisiones con if y bucles while | 100 min | 64 |
+| 4 | Diccionarios y conjuntos | 120 min | 35 |
+| 5 | Funciones y módulos | 100 min | 53 |
+| 6 | Archivos y manejo de errores | 120 min | 63 |
+| 7 | Pruebas con pytest | 140 min | 41 |
 | 8 | Guardar y consultar datos con SQLite | 120 min | 46 |
 | P | Proyecto final: flujo de ventas | 8 h | 105 |
 
-El curso se aprueba cuando las 470 pruebas pasan.
+El curso se aprueba cuando las 474 pruebas pasan.
 
 ### Lección 0. Preparación
 
@@ -62,7 +62,7 @@ El curso se aprueba cuando las 470 pruebas pasan.
 
 ### Lección 1. Variables, texto y números
 
-- **Temas:** variables y reglas de nombres, `str`, `int` y `float`, métodos de texto, f-strings, conversión de texto a número, redondeo, formato de importes, comentarios, lectura de `NameError` y `ValueError`.
+- **Temas:** variables y reglas de nombres, `str`, `int` y `float`, métodos de texto, f-strings, conversión de texto a número, redondeo, formato de importes, comentarios, lectura de `NameError` y `ValueError`, la forma mínima de una función (`def` y `return`) para poder entregar los ejercicios.
 - **Por qué va aquí:** son las piezas más pequeñas del lenguaje; todo lo demás se construye con ellas.
 - **Por qué importa en datos:** los archivos entregan todo como texto. Convertir `"$1,250.50"` en un número confiable es el primer trabajo de cualquier flujo de datos.
 - **Referencias:** Matthes, cap. 2; Lerner, cap. 2 y 3; Hermans, cap. 3.
@@ -76,7 +76,7 @@ El curso se aprueba cuando las 470 pruebas pasan.
 
 ### Lección 3. Decisiones con if y bucles while
 
-- **Temas:** booleanos, comparaciones, `and`, `or`, `not`, `in`, `if-elif-else`, `None`, filtrar y contar dentro de un `for`, `while` y `break`, cuándo usar cada bucle.
+- **Temas:** booleanos, comparaciones, `and`, `or`, `not`, `in`, `isinstance`, `if-elif-else`, `None`, filtrar y contar dentro de un `for`, `while` y `break`, cuándo usar cada bucle.
 - **Por qué va aquí:** hasta ahora el código trata igual a todos los datos. Decidir permite separar lo válido de lo inválido.
 - **Por qué importa en datos:** validar, clasificar y detectar faltantes son decisiones. Un `elif` en el orden equivocado no lanza error: produce cifras incorrectas.
 - **Referencias:** Matthes, cap. 5 y 7; Lubanovic, cap. 4.
@@ -104,8 +104,8 @@ El curso se aprueba cuando las 470 pruebas pasan.
 
 ### Lección 7. Pruebas con pytest
 
-- **Temas:** qué es una prueba unitaria, `assert`, preparar, actuar y comprobar, lectura detallada de un fallo, `pytest.raises`, parametrización, fixtures, qué casos elegir, opciones de pytest y su configuración.
-- **Por qué va aquí:** tras seis lecciones leyendo pruebas ajenas, el alumno conoce el formato y puede concentrarse en lo difícil: decidir qué probar.
+- **Temas:** las funciones como valores (pasar una función como argumento), qué es una prueba unitaria, `assert`, preparar, actuar y comprobar, lectura detallada de un fallo, `pytest.raises`, parametrización, fixtures, qué casos elegir, opciones de pytest y su configuración.
+- **Por qué va aquí:** tras seis lecciones leyendo pruebas ajenas, el alumno conoce el formato y puede concentrarse en lo difícil: decidir qué probar. Las funciones como valores se enseñan aquí, y no en la lección 5, porque es aquí donde se necesitan: cada comprobación recibe la función que debe revisar.
 - **Por qué importa en datos:** en datos el error no avisa; aparece como una cifra equivocada en un tablero. Las pruebas son lo que separa un script de un trabajo de ingeniería.
 - **Cómo se evalúa:** las pruebas del alumno se corren contra una implementación correcta y contra varias defectuosas. Deben aprobar la primera y detectar las demás.
 - **Referencias:** Matthes, cap. 11; Okken, cap. 1, 2, 3 y 6.
