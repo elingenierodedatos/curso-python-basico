@@ -47,6 +47,8 @@ git config --global pull.rebase false
 
 Necesitas Python 3.10 o más reciente. Elige **una** de las tres opciones.
 
+> **Windows, antes de instalar Python por cualquier opción:** apaga los alias de la Microsoft Store. Abre **Inicio**, escribe "alias de ejecución", entra en **Administrar alias de ejecución de aplicaciones** y apaga **python.exe** y **python3.exe**. Si no lo haces, al escribir `python` se abre la tienda en lugar de Python.
+
 **Opción A. Instalador oficial.** Es la de la lección 0: [python.org/downloads](https://www.python.org/downloads/). En Windows marca **Add python.exe to PATH**.
 
 **Opción B. Desde la terminal.**
@@ -73,7 +75,7 @@ uv tool update-shell
 
 Cierra la terminal otra vez para que tome el cambio. `uv python list` te muestra las versiones instaladas.
 
-> **Windows, antes de instalar Python por cualquier opción:** apaga los alias de la Microsoft Store. Abre **Inicio**, escribe "alias de ejecución", entra en **Administrar alias de ejecución de aplicaciones** y apaga **python.exe** y **python3.exe**. Si no lo haces, al escribir `python` se abre la tienda en lugar de Python.
+> Si `uv` responde que `--default` necesita `--preview`, tienes una versión vieja: actualízala con `uv self update` y repite el comando.
 
 Comprueba:
 
