@@ -3,6 +3,7 @@
 Antes de escribir Python necesitas un lugar donde trabajar. En esta lección instalas lo necesario, corres tu primera prueba y aprendes a leer un error. Hazla con calma: todo el curso se apoya en lo que configures aquí.
 
 **Tiempo estimado:** 45 minutos.
+**Diapositivas:** [Lección 0 - Preparación](https://drive.google.com/drive/folders/19aPe8Ya0xx4FG9uqNOr6ITV6ym_KvzM9?usp=sharing), en la carpeta de Drive con las de todas las lecciones.
 
 ## Qué vas a lograr
 
