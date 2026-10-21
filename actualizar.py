@@ -14,15 +14,21 @@ Después revisa los cambios y guárdalos con `git commit` y `git push`.
 import fnmatch
 import subprocess
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 RAIZ = Path(__file__).resolve().parent
 REMOTO = "curso"
 URL = "https://github.com/elingenierodedatos/curso-python-basico.git"
 RAMA = "main"
+REFERENCIA = f"{REMOTO}/{RAMA}"
 
 # Archivos que escribes tú. Si ya existen en tu copia, nunca se reemplazan.
 # Si el curso agrega uno nuevo (por ejemplo, una lección nueva), se copia.
+#
+# Regla para quien mantiene el curso: no agregues ni renombres funciones en un
+# archivo de esta lista que ya esté publicado. La copia del alumno no recibe ese
+# cambio y las pruebas nuevas no podrían importar la función. Los ejercicios
+# nuevos van en lecciones nuevas.
 TUYOS = [
     "lecciones/*/ejercicios.py",
     "lecciones/leccion_05_funciones_y_modulos/limpieza.py",
@@ -47,9 +53,27 @@ def es_tuyo(ruta):
     return any(fnmatch.fnmatch(ruta, patron) for patron in TUYOS)
 
 
-def detener(mensaje):
+def detener(mensaje, resultado=None):
+    if resultado is not None and resultado.stderr.strip():
+        mensaje += f"\n  Detalle: {resultado.stderr.strip()}"
     print(f"\n  {mensaje}\n")
     sys.exit(1)
+
+
+def pruebas_de(ruta):
+    """Devuelve la carpeta cuyas pruebas dependen de un archivo tuyo."""
+    if ruta.startswith("proyecto/"):
+        return "proyecto/tests/"
+    return str(PurePosixPath(ruta).parent) + "/test_"
+
+
+def conectar_remoto():
+    """Crea el remoto del curso, o corrige su dirección si apunta a otro lado."""
+    if REMOTO not in git("remote").stdout.split():
+        git("remote", "add", "-t", RAMA, REMOTO, URL)
+        print(f"\n  Conecté tu copia con el repositorio del curso ({REMOTO}).")
+    elif git("remote", "get-url", REMOTO).stdout.strip() != URL:
+        git("remote", "set-url", REMOTO, URL)
 
 
 def main():
@@ -59,19 +83,19 @@ def main():
     if git("rev-parse", "--is-inside-work-tree").returncode != 0:
         detener("Corre este comando desde la carpeta principal de tu copia del curso.")
 
-    if REMOTO not in git("remote").stdout.split():
-        git("remote", "add", "-t", RAMA, REMOTO, URL)
-        print(f"\n  Conecté tu copia con el repositorio del curso ({REMOTO}).")
+    conectar_remoto()
 
-    descarga = git("fetch", REMOTO, RAMA)
+    descarga = git("fetch", REMOTO, f"+refs/heads/{RAMA}:refs/remotes/{REFERENCIA}")
     if descarga.returncode != 0:
         detener(
-            "No pude descargar las novedades del curso. Revisa tu conexión a "
-            f"internet.\n  Detalle: {descarga.stderr.strip()}"
+            "No pude descargar las novedades del curso. Revisa tu conexión a internet.",
+            descarga,
         )
 
-    referencia = f"{REMOTO}/{RAMA}"
-    archivos = git("ls-tree", "-r", "--name-only", referencia).stdout.splitlines()
+    listado = git("ls-tree", "-r", "--name-only", REFERENCIA)
+    archivos = listado.stdout.splitlines()
+    if listado.returncode != 0 or not archivos:
+        detener(f"No encontré los archivos del curso en {REFERENCIA}.", listado)
 
     actualizar = []
     respetados = []
@@ -91,8 +115,17 @@ def main():
             "`python actualizar.py --forzar` para descartarlos."
         )
 
-    git("checkout", referencia, "--", *actualizar)
-    cambiados = git("diff", "--cached", "--name-only").stdout.splitlines()
+    copia = git("checkout", REFERENCIA, "--", *actualizar)
+    if copia.returncode != 0:
+        detener(
+            "No pude copiar los archivos del curso. Si tienes VS Code u otro "
+            "programa usando Git, ciérralo y vuelve a intentar.",
+            copia,
+        )
+
+    cambiados = git(
+        "diff", "--cached", "--name-only", "--", *actualizar
+    ).stdout.splitlines()
 
     if not cambiados:
         print("\n  Ya tenías todo al día. No hay nada que guardar.\n")
@@ -102,6 +135,27 @@ def main():
     for ruta in cambiados:
         print(f"    {ruta}")
     print(f"\n  Tus archivos no se tocaron ({len(respetados)}).")
+
+    # Si cambiaron las pruebas de un archivo tuyo, revisa que siga al día.
+    revisar = [
+        ruta
+        for ruta in respetados
+        if any(cambio.startswith(pruebas_de(ruta)) for cambio in cambiados)
+        and git("diff", "--quiet", REFERENCIA, "--", ruta).returncode != 0
+    ]
+    if revisar:
+        print(
+            "\n  Cambiaron las pruebas de estos archivos tuyos, y la versión del "
+            "curso es distinta a la tuya:"
+        )
+        for ruta in revisar:
+            print(f"    {ruta}")
+        print(
+            "  Corre sus pruebas. Si alguna falla porque falta una función, "
+            "mira la versión del curso con:"
+        )
+        print(f"    git show {REFERENCIA}:RUTA_DEL_ARCHIVO")
+
     print("\n  Para terminar:")
     print("    python -m pip install -r requirements.txt")
     print('    git commit -m "Actualiza el material del curso"')

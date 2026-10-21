@@ -79,7 +79,7 @@ pytest lecciones/leccion_00_preparacion
 
 ## Recibir actualizaciones del curso
 
-Tu copia se creó con **Use this template**, así que no comparte historial con el repositorio del curso y `git pull` no trae las novedades. Cuando anunciemos cambios (guías corregidas, pruebas nuevas, datos, una lección nueva), corre esto desde la carpeta de tu copia, con el entorno virtual activo:
+Tu copia se creó con **Use this template**, así que no comparte historial con el repositorio del curso y `git pull` no trae las novedades. Cuando anunciemos cambios (guías o pruebas corregidas, datos, una lección nueva), corre esto desde la carpeta de tu copia, con el entorno virtual activo:
 
 ```bash
 python actualizar.py
@@ -87,7 +87,7 @@ python actualizar.py
 
 El script se conecta con el repositorio del curso, descarga lo nuevo y copia solo los archivos del curso. **Tu trabajo no se toca:** los `ejercicios.py`, `limpieza.py` de la lección 5, tus pruebas de la lección 7 (`test_mis_pruebas.py`) y tu código del proyecto (`proyecto/flujo_ventas/`). Si el curso agrega una lección nueva, llega completa.
 
-Al terminar te dice qué cambió y qué comandos siguen: reinstalar dependencias, `git commit` y `git push`. Si tienes cambios sin guardar en algún archivo del curso, se detiene antes de reemplazarlos y te lo avisa.
+Al terminar te dice qué cambió y qué comandos siguen: reinstalar dependencias, `git commit` y `git push`. Si cambiaron las pruebas de una lección que ya resolviste, te avisa para que vuelvas a correrlas. Si tienes cambios sin guardar en algún archivo del curso, se detiene antes de reemplazarlos.
 
 > Si modificaste un `ejemplos.py` para experimentar y lo guardaste con `git commit`, la actualización lo reemplaza por la versión del curso. Tu versión sigue en el historial de Git.
 
