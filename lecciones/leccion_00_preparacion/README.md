@@ -70,6 +70,8 @@ git clone https://github.com/TU_USUARIO/mi-curso-python.git
 cd mi-curso-python
 ```
 
+Si le pusiste otro nombre a tu repositorio, cámbialo en los dos comandos.
+
 Desde ahora, todos los comandos del curso se escriben dentro de esa carpeta. Si usas VS Code, abre esa carpeta completa (**File → Open Folder**), no un archivo suelto.
 
 ## Paso 4. Crea y activa el entorno virtual

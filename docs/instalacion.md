@@ -56,7 +56,7 @@ Necesitas Python 3.10 o más reciente. Elige **una** de las tres opciones.
 | Sistema | Comando |
 | --- | --- |
 | Windows | `winget install -e --id Python.Python.3.12` |
-| macOS | `brew install python@3.12` |
+| macOS | `brew install python` (instala la versión estable más reciente y crea el comando `python3`) |
 | Linux (Ubuntu, Debian) | `sudo apt install python3 python3-venv` (Ubuntu 24.04 trae 3.12) |
 
 **Opción C. Con `uv`, un gestor de versiones.** Es lo que uso en el video. Sirve cuando un proyecto pide Python 3.12 y otro 3.13: instalas las versiones que quieras y eliges cuál es la predeterminada. No hace falta aprender `uv` para el curso; el resto de los comandos no cambian.
@@ -83,7 +83,7 @@ Comprueba:
 python --version
 ```
 
-En macOS y Linux, si `python` no existe, usa `python3`. Después de activar el entorno virtual (paso 4 de la lección 0), `python` funciona en todos los sistemas.
+En macOS y Linux, si `python` no existe, usa `python3`. La versión que aparezca debe ser **3.10 o mayor**. Si en macOS ves `Python 3.9`, es el Python que trae Apple: instala con la opción A o con `brew install python`, abre una terminal nueva y vuelve a comprobar. Después de activar el entorno virtual (paso 4 de la lección 0), `python` funciona en todos los sistemas.
 
 ## 4. Visual Studio Code
 
