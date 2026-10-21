@@ -73,8 +73,23 @@ pytest lecciones/leccion_00_preparacion
 | `pytest lecciones/leccion_01_variables_y_texto -k ejercicio_3` | Evaluar un solo ejercicio |
 | `python lecciones/leccion_01_variables_y_texto/ejemplos.py` | Correr los ejemplos resueltos |
 | `python progreso.py` | Ver tu avance en todo el curso |
+| `python actualizar.py` | Traer las novedades del curso sin tocar tu trabajo |
 | `ruff check .` | Revisar el estilo de tu código |
 | `ruff format .` | Dar formato a tu código |
+
+## Recibir actualizaciones del curso
+
+Tu copia se creó con **Use this template**, así que no comparte historial con el repositorio del curso y `git pull` no trae las novedades. Cuando anunciemos cambios (guías o pruebas corregidas, datos, una lección nueva), corre esto desde la carpeta de tu copia, con el entorno virtual activo:
+
+```bash
+python actualizar.py
+```
+
+El script se conecta con el repositorio del curso, descarga lo nuevo y copia solo los archivos del curso. **Tu trabajo no se toca:** los `ejercicios.py`, `limpieza.py` de la lección 5, tus pruebas de la lección 7 (`test_mis_pruebas.py`) y tu código del proyecto (`proyecto/flujo_ventas/`). Si el curso agrega una lección nueva, llega completa.
+
+Al terminar te dice qué cambió y qué comandos siguen: reinstalar dependencias, `git commit` y `git push`. Si cambiaron las pruebas de una lección que ya resolviste, te avisa para que vuelvas a correrlas. Si tienes cambios sin guardar en algún archivo del curso, se detiene antes de reemplazarlos.
+
+> Si modificaste un `ejemplos.py` para experimentar y lo guardaste con `git commit`, la actualización lo reemplaza por la versión del curso. Tu versión sigue en el historial de Git.
 
 ## Reglas del curso
 
@@ -91,6 +106,7 @@ pytest lecciones/leccion_00_preparacion
 ├── proyecto/           el proyecto final
 ├── docs/               plan de estudios, glosario y guías de apoyo
 ├── progreso.py         muestra tu avance
+├── actualizar.py       trae las novedades del curso
 ├── pyproject.toml      configuración de pytest y ruff
 └── requirements.txt    dependencias del curso
 ```

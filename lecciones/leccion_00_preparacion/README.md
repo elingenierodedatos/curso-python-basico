@@ -195,7 +195,7 @@ git push
 > La primera vez que hagas `git push`, Git te pedirá iniciar sesión en GitHub. Es normal: necesita comprobar que el repositorio es tuyo.
 >
 > - **Windows:** Git trae un administrador de credenciales que abre una ventana del navegador. Inicia sesión con tu cuenta y Git guardará el acceso.
-> - **macOS, Linux, o si la terminal te pide usuario y contraseña:** el usuario es tu nombre de GitHub, pero la contraseña **no** es la de tu cuenta: GitHub ya no la acepta. Crea un token en GitHub, en **Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token**, marca el permiso **repo** y pégalo cuando te pida la contraseña (no se ve mientras lo pegas). Guárdalo en un lugar seguro: si tu sistema no lo recuerda, te lo volverá a pedir.
+> - **macOS, Linux, o si la terminal te pide usuario y contraseña:** el usuario es tu nombre de GitHub, pero la contraseña **no** es la de tu cuenta: GitHub ya no la acepta. Crea un token en GitHub, en **Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token**, marca los permisos **repo** y **workflow** (el segundo hace falta cuando una actualización del curso trae cambios en `.github`) y pégalo cuando te pida la contraseña (no se ve mientras lo pegas). Guárdalo en un lugar seguro: si tu sistema no lo recuerda, te lo volverá a pedir.
 
 Hazlo al terminar cada lección. Cada vez que subes cambios, GitHub corre las mismas pruebas en Ubuntu, macOS y Windows, con Python 3.10 y 3.13, y deja el resultado en la pestaña **Actions** de tu repositorio. Entra, abre la corrida con el mensaje de tu commit y verás seis marcas: una por cada combinación de sistema y versión de Python.
 
