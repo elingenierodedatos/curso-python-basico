@@ -13,7 +13,9 @@ proyecto/salida/
 progreso.json
 
 # Editores y sistema operativo
-.vscode/
+# Se versiona solo la lista de extensiones recomendadas; el resto de .vscode es personal.
+.vscode/*
+!.vscode/extensions.json
 .idea/
 .DS_Store
 Thumbs.db

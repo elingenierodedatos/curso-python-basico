@@ -8,6 +8,8 @@ Un curso gratuito de **EL INGENIERO DE DATOS**. Ensúciate las manos con datos r
 
 Al final del curso tendrás un flujo que lee un archivo de pedidos sucio, lo limpia, rechaza con motivo lo que no se puede corregir, carga el resto en una base de datos y genera un reporte de ventas. Todo respaldado por pruebas y publicado en tu repositorio.
 
+Son **475 pruebas** en total, repartidas entre las nueve lecciones y el proyecto. El curso se aprueba cuando todas pasan; `python progreso.py` te dice cuántas llevas.
+
 ## Cómo funciona
 
 1. Lees la guía de la lección, con ejemplos resueltos.
@@ -32,12 +34,21 @@ No hay exámenes: el código pasa las pruebas o no las pasa.
 | 8 | [Guardar y consultar datos con SQLite](lecciones/leccion_08_sqlite/README.md) | Cargar a una base de datos y consultarla con SQL |
 | P | [Proyecto final: Flujo de ventas](proyecto/README.md) | Unir todo en un flujo de datos completo |
 
-Son unas 24 horas de trabajo. El detalle y el porqué de cada tema están en el [plan de estudios](docs/plan-de-estudios.md).
+Son unas 24 horas de trabajo. El detalle y el porqué de cada tema están en el [plan de estudios](docs/plan-de-estudios.md). Las diapositivas de cada lección están en [esta carpeta de Drive](https://drive.google.com/drive/folders/19aPe8Ya0xx4FG9uqNOr6ITV6ym_KvzM9?usp=sharing).
+
+## Qué necesitas
+
+- Una computadora con **Windows, macOS o Linux**. El curso corre igual en los tres y las pruebas se ejecutan en cada uno.
+- **Python 3.10 o más reciente**. Las pruebas corren en GitHub con 3.10 y 3.13 en los tres sistemas.
+- **Git** y una cuenta de GitHub.
+- Un editor. Recomendamos Visual Studio Code.
+
+No necesitas Docker, ni una base de datos instalada, ni una cuenta en la nube.
 
 ## Empieza aquí
 
 1. Presiona **Use this template** y crea tu propia copia del repositorio.
-2. Sigue la [lección 0](lecciones/leccion_00_preparacion/README.md). Te lleva paso a paso en Windows, macOS y Linux.
+2. Sigue la [lección 0](lecciones/leccion_00_preparacion/README.md). Te lleva paso a paso en Windows, macOS y Linux. Si prefieres instalar desde la terminal, está la [guía de instalación](docs/instalacion.md).
 
 Si ya tienes Python 3.10 o superior y Git:
 
@@ -84,7 +95,7 @@ pytest lecciones/leccion_00_preparacion
 └── requirements.txt    dependencias del curso
 ```
 
-Todo corre con Python y dos dependencias. No necesitas Docker, ni una base de datos instalada, ni una cuenta en la nube.
+Todo corre con Python y dos dependencias.
 
 ## Licencia
 

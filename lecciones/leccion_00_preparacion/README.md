@@ -3,6 +3,7 @@
 Antes de escribir Python necesitas un lugar donde trabajar. En esta lección instalas lo necesario, corres tu primera prueba y aprendes a leer un error. Hazla con calma: todo el curso se apoya en lo que configures aquí.
 
 **Tiempo estimado:** 45 minutos.
+**Diapositivas:** [Lección 0 - Preparación](https://drive.google.com/drive/folders/19aPe8Ya0xx4FG9uqNOr6ITV6ym_KvzM9?usp=sharing), en la carpeta de Drive con las de todas las lecciones.
 
 ## Qué vas a lograr
 
@@ -11,9 +12,13 @@ Antes de escribir Python necesitas un lugar donde trabajar. En esta lección ins
 - Correr las pruebas y entender qué te dicen.
 - Completar tu primer ejercicio.
 
+> ¿Prefieres instalar todo desde la terminal, como en el video, o quieres manejar varias versiones de Python? Sigue la [guía de instalación por terminal](../../docs/instalacion.md) y vuelve aquí al paso 3. El resultado es el mismo.
+
 ## Paso 1. Instala Python
 
 Necesitas Python 3.10 o más reciente.
+
+> **Windows, antes de instalar:** si al escribir `python` se abre la Microsoft Store en lugar de Python, Windows tiene un atajo que se interpone. Abre **Inicio**, escribe "alias de ejecución", entra en **Administrar alias de ejecución de aplicaciones** y apaga los interruptores de **python.exe** y **python3.exe**. Son dos interruptores separados. Hacerlo ahora te ahorra el error más común de esta lección.
 
 | Sistema | Cómo instalarlo |
 | --- | --- |
@@ -21,7 +26,7 @@ Necesitas Python 3.10 o más reciente.
 | macOS | Descarga el instalador desde [python.org/downloads](https://www.python.org/downloads/) y sigue los pasos. |
 | Linux | Casi siempre ya viene instalado. Si no, en Ubuntu o Debian: `sudo apt install python3 python3-venv`. |
 
-Abre una terminal para comprobarlo. En Windows busca **PowerShell**; en macOS y Linux, **Terminal**.
+Abre una terminal para comprobarlo. En Windows busca **PowerShell** (no uses el Símbolo del sistema, `cmd`: los comandos de esta lección están escritos para PowerShell); en macOS y Linux, **Terminal**.
 
 ```bash
 python --version
@@ -31,12 +36,10 @@ Debe aparecer algo como `Python 3.12.4`.
 
 > En macOS y Linux, si el comando `python` no existe, usa `python3`. Solo lo necesitas así hasta el paso 4; después de activar el entorno virtual, `python` funciona en todos los sistemas.
 
-> **Windows:** si al escribir `python` se abre la Microsoft Store en lugar de mostrarte la versión, Windows tiene un atajo que se interpone. Abre **Inicio**, escribe "alias de ejecución", entra en **Administrar alias de ejecución de aplicaciones** y apaga los interruptores de **python.exe** y **python3.exe**. Después abre una terminal nueva y vuelve a probar.
-
 ## Paso 2. Instala Git y un editor
 
 - **Git** guarda el historial de tu trabajo y lo sube a GitHub. Descárgalo desde [git-scm.com](https://git-scm.com/downloads). Igual que con Python, cierra la terminal y ábrela de nuevo al terminar, y compruébalo con `git --version`.
-- **Editor:** usa el que prefieras. Si no tienes uno, [Visual Studio Code](https://code.visualstudio.com/) es gratuito y funciona igual en los tres sistemas.
+- **Editor:** usa el que prefieras. Si no tienes uno, [Visual Studio Code](https://code.visualstudio.com/) es gratuito y funciona igual en los tres sistemas. Cuando abras la carpeta del curso, VS Code te va a sugerir dos extensiones: **Python** (de Microsoft) y **Ruff**. Acepta la primera; la segunda es opcional y revisa el estilo de tu código.
 
 Antes de seguir, dile a Git quién eres. Cada cambio que guardes llevará este nombre y este correo. Es obligatorio: sin esto, Git se niega a guardar.
 
@@ -45,20 +48,31 @@ git config --global user.name "Tu Nombre"
 git config --global user.email "tu@correo.com"
 ```
 
+Estas dos líneas son opcionales, pero evitan dos preguntas que Git te haría más adelante: que tu rama principal se llame `main`, como en GitHub, y que al bajar cambios no intente combinarlos de una forma que todavía no conoces.
+
+```bash
+git config --global init.defaultBranch main
+git config --global pull.rebase false
+```
+
 > Usa el mismo correo con el que creaste tu cuenta de GitHub. Si prefieres no mostrar tu correo personal, GitHub te da una dirección `noreply` en **Settings → Emails** que puedes usar aquí.
+
+> No necesitas configurar llaves SSH para este curso. Clonar por HTTPS, como en el paso 3, es suficiente.
 
 ## Paso 3. Crea tu copia del curso
 
 1. Entra al repositorio del curso en GitHub y presiona **Use this template** y luego **Create a new repository**.
-2. Ponle un nombre, por ejemplo `mi-curso-python`, y créalo en tu cuenta.
-3. Copia la dirección de **tu** repositorio y descárgalo:
+2. En **Owner** elige tu usuario. Ponle un nombre, por ejemplo `mi-curso-python` (puedes dejarle el mismo nombre del curso). Déjalo **Public** si quieres que forme parte de tu portafolio, y no marques **Include all branches**. Lo demás se queda como está.
+3. Copia la dirección de **tu** repositorio (botón **Code**, pestaña **HTTPS**) y descárgalo:
 
 ```bash
 git clone https://github.com/TU_USUARIO/mi-curso-python.git
 cd mi-curso-python
 ```
 
-Desde ahora, todos los comandos del curso se escriben dentro de esa carpeta.
+Si le pusiste otro nombre a tu repositorio, cámbialo en los dos comandos.
+
+Desde ahora, todos los comandos del curso se escriben dentro de esa carpeta. Si usas VS Code, abre esa carpeta completa (**File → Open Folder**), no un archivo suelto.
 
 ## Paso 4. Crea y activa el entorno virtual
 
@@ -183,7 +197,7 @@ git push
 > - **Windows:** Git trae un administrador de credenciales que abre una ventana del navegador. Inicia sesión con tu cuenta y Git guardará el acceso.
 > - **macOS, Linux, o si la terminal te pide usuario y contraseña:** el usuario es tu nombre de GitHub, pero la contraseña **no** es la de tu cuenta: GitHub ya no la acepta. Crea un token en GitHub, en **Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token**, marca el permiso **repo** y pégalo cuando te pida la contraseña (no se ve mientras lo pegas). Guárdalo en un lugar seguro: si tu sistema no lo recuerda, te lo volverá a pedir.
 
-Hazlo al terminar cada lección. Cada vez que subes cambios, GitHub corre las mismas pruebas y deja el resultado en la pestaña **Actions** de tu repositorio.
+Hazlo al terminar cada lección. Cada vez que subes cambios, GitHub corre las mismas pruebas en Ubuntu, macOS y Windows, con Python 3.10 y 3.13, y deja el resultado en la pestaña **Actions** de tu repositorio. Entra, abre la corrida con el mensaje de tu commit y verás seis marcas: una por cada combinación de sistema y versión de Python.
 
 ## Antes de seguir
 
@@ -199,10 +213,16 @@ Responde de memoria, sin volver a leer. Intentar recordar es lo que fija lo apre
 | Qué ves | Qué hacer |
 | --- | --- |
 | `python` no se reconoce como comando | Primero cierra la terminal y ábrela de nuevo. Si sigue igual, en Windows revisa los alias de la Microsoft Store (ver el aviso del paso 1) y, solo si nada de eso funciona, reinstala Python marcando **Add python.exe to PATH**. En macOS y Linux, prueba con `python3`. |
+| Instalaste Python o Git y la terminal nueva sigue sin verlos | En Windows, cierra sesión y vuelve a entrar: la terminal hereda la configuración del Explorador y a veces no se actualiza con solo abrir una ventana nueva. |
+| La terminal abre en `C:\WINDOWS\system32` | No estás en tu carpeta de usuario. Escribe `cd $HOME` y después entra a la carpeta del curso con `cd`. |
+| `Activate.ps1` no hace nada o da un error raro y la ventana dice `Símbolo del sistema` | Estás en `cmd`, no en PowerShell. Abre PowerShell y repite el paso 4. Si prefieres quedarte en `cmd`, el comando de activación ahí es `.venv\Scripts\activate.bat`. |
 | `la ejecución de scripts está deshabilitada en este sistema` | Falta el permiso de PowerShell. Corre `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` como se explica en el paso 4 y vuelve a activar el entorno. |
 | `pytest` no se reconoce como comando | El entorno virtual no está activo. Repite el paso 4. |
 | `No module named pytest` | Faltó el paso 5, o lo corriste sin activar el entorno. |
 | `ModuleNotFoundError: No module named 'lecciones'` | Estás en otra carpeta. Los comandos se corren desde la carpeta principal del curso. |
+| VS Code no encuentra las pruebas o usa otro Python | Ctrl + Shift + P (Cmd + Shift + P en macOS), `Python: Select Interpreter` y elige el que diga `.venv`. |
+
+Si nada de esto resuelve tu caso, escribe en el [Discord del curso](https://discord.gg/tWtUXnAMuQ) con tu sistema operativo, el comando que corriste y una captura del error completo.
 
 ## Referencias
 
