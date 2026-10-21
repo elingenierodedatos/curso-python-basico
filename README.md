@@ -76,6 +76,28 @@ pytest lecciones/leccion_00_preparacion
 | `ruff check .` | Revisar el estilo de tu código |
 | `ruff format .` | Dar formato a tu código |
 
+## Recibir actualizaciones del curso
+
+Tu copia se creó con **Use this template**, así que no comparte historial con el repositorio del curso y `git pull` no trae las novedades. Cuando anunciemos cambios (guías corregidas, pruebas nuevas, ejemplos), tráelos así. Solo se actualizan los archivos del curso: tus `ejercicios.py`, tus pruebas de la lección 7 y tu código del proyecto no se tocan.
+
+Solo la primera vez, conecta tu copia con el repositorio del curso:
+
+```bash
+git remote add curso https://github.com/elingenierodedatos/curso-python-basico.git
+```
+
+Cada vez que haya novedades, desde la carpeta de tu copia y con el entorno virtual activo:
+
+```bash
+git fetch curso
+git checkout curso/main -- README.md docs progreso.py requirements.txt pyproject.toml .github .vscode/extensions.json proyecto/README.md proyecto/tests "lecciones/*/README.md" "lecciones/*/ejemplos.py" "lecciones/*/test_ejercicios.py"
+python -m pip install -r requirements.txt
+git commit -m "Actualiza el material del curso"
+git push
+```
+
+Los comandos funcionan igual en PowerShell, macOS y Linux. Las comillas son necesarias. Si `git commit` responde `nothing to commit`, ya tenías todo al día.
+
 ## Reglas del curso
 
 - **Escribe tú el código.** Durante el curso, sin asistentes de IA. [Aquí explicamos por qué](docs/por-que-sin-ia.md).
