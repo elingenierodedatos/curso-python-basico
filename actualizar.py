@@ -67,6 +67,15 @@ def pruebas_de(ruta):
     return str(PurePosixPath(ruta).parent) + "/test_"
 
 
+def distinto_al_curso(ruta):
+    """Indica si tu copia de un archivo difiere de la versión del curso."""
+    if not (RAIZ / ruta).is_file():
+        return False
+    tuyo = git("hash-object", "--", ruta).stdout.strip()
+    del_curso = git("rev-parse", f"{REFERENCIA}:{ruta}").stdout.strip()
+    return tuyo != del_curso
+
+
 def conectar_remoto():
     """Crea el remoto del curso, o corrige su dirección si apunta a otro lado."""
     if REMOTO not in git("remote").stdout.split():
@@ -106,9 +115,20 @@ def main():
             actualizar.append(ruta)
 
     # Cambios sin guardar en archivos del curso: se perderían al actualizar.
-    sin_guardar = git("status", "--porcelain", "--", *actualizar).stdout.splitlines()
+    # Los que ya son iguales a la versión del curso (por ejemplo, si corres el
+    # script dos veces antes de hacer commit) no cuentan.
+    sin_guardar = [
+        ruta
+        for ruta in (
+            linea[3:].split(" -> ")[-1].strip('"')
+            for linea in git(
+                "status", "--porcelain", "--", *actualizar
+            ).stdout.splitlines()
+        )
+        if distinto_al_curso(ruta)
+    ]
     if sin_guardar and "--forzar" not in sys.argv:
-        lista = "\n    ".join(linea[3:] for linea in sin_guardar)
+        lista = "\n    ".join(sin_guardar)
         detener(
             "Tienes cambios sin guardar en archivos del curso que se van a "
             f"reemplazar:\n    {lista}\n\n  Guárdalos con git commit, o corre "
@@ -155,6 +175,14 @@ def main():
             "mira la versión del curso con:"
         )
         print(f"    git show {REFERENCIA}:RUTA_DEL_ARCHIVO")
+
+    if any(ruta.startswith(".github/workflows/") for ruta in cambiados):
+        print(
+            "\n  Esta actualización cambia las pruebas automáticas de GitHub "
+            "(.github/workflows). Si `git push` responde que falta el permiso "
+            "`workflow`, crea un token con los permisos repo y workflow, como "
+            "en la lección 0."
+        )
 
     print("\n  Para terminar:")
     print("    python -m pip install -r requirements.txt")
