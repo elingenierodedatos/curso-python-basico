@@ -75,7 +75,7 @@ uv tool update-shell
 
 Cierra la terminal otra vez para que tome el cambio. `uv python list` te muestra las versiones instaladas.
 
-> Si `uv` responde que `--default` necesita `--preview`, tienes una versión vieja: actualízala con `uv self update` y repite el comando.
+> Si `uv` responde que `--default` es una función en vista previa y pide `--preview`, repite el comando así: `uv python install 3.12 --default --preview`.
 
 Comprueba:
 
@@ -92,6 +92,8 @@ En macOS y Linux, si `python` no existe, usa `python3`. Después de activar el e
 | Windows | `winget install -e --id Microsoft.VisualStudioCode` |
 | macOS | `brew install --cask visual-studio-code` o el instalador de [code.visualstudio.com](https://code.visualstudio.com/) |
 | Linux | `sudo snap install code --classic` o el paquete `.deb` / `.rpm` de [code.visualstudio.com](https://code.visualstudio.com/) |
+
+> **macOS sin Homebrew:** el instalador de la página no agrega el comando `code` a la terminal. Abre VS Code, presiona Cmd + Shift + P, escribe `Shell Command: Install 'code' command in PATH`, confirma y abre una terminal nueva.
 
 Extensiones que usamos en el curso. La primera es la que importa; la segunda revisa el estilo de tu código con las mismas reglas que `ruff check .`:
 
@@ -111,7 +113,7 @@ Si te aparece una sugerencia de código de alguna inteligencia artificial (Copil
 
 ## 5. Comprobación final
 
-Las tres líneas deben responder con una versión:
+Las tres líneas deben responder con una versión. En macOS y Linux, si `python` no existe, prueba `python3 --version`: también es válido.
 
 ```bash
 git --version
@@ -130,6 +132,7 @@ Listo. Vuelve al [paso 3 de la lección 0](../lecciones/leccion_00_preparacion/R
 | `python` abre la Microsoft Store | Apaga los alias de la Store (aviso del punto 3) y abre una terminal nueva. |
 | La terminal abre en `C:\WINDOWS\system32` | No estás en tu carpeta de usuario. Escribe `cd $HOME` antes de seguir. Para que siempre abra ahí: Windows Terminal → Configuración → Perfiles → Valores predeterminados → Directorio de inicio = `%USERPROFILE%`. |
 | Estás en el Símbolo del sistema (cmd) y `Activate.ps1` no funciona | Cambia a PowerShell. Si prefieres quedarte en cmd, el comando de activación es `.venv\Scripts\activate.bat`. |
+| macOS: `code: command not found` | Instalaste VS Code sin Homebrew. Sigue el aviso del punto 4 para agregar `code` a la terminal. |
 | macOS: `brew: command not found` | Instala Homebrew desde [brew.sh](https://brew.sh) o usa los instaladores oficiales. |
 | macOS: `xcrun: error: invalid active developer path` | Faltan las herramientas de Apple. Corre `xcode-select --install`. |
 | Linux: `ensurepip is not available` al crear el entorno | Falta el paquete del entorno virtual: `sudo apt install python3-venv`. |

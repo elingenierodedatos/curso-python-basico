@@ -39,7 +39,7 @@ Son unas 24 horas de trabajo. El detalle y el porqué de cada tema están en el 
 ## Qué necesitas
 
 - Una computadora con **Windows, macOS o Linux**. El curso corre igual en los tres y las pruebas se ejecutan en cada uno.
-- **Python 3.10 o más reciente**. Las pruebas corren en GitHub con 3.10 y 3.13 en los tres sistemas; cualquier versión entre esas sirve.
+- **Python 3.10 o más reciente**. Las pruebas corren en GitHub con 3.10 y 3.13 en los tres sistemas.
 - **Git** y una cuenta de GitHub.
 - Un editor. Recomendamos Visual Studio Code.
 
